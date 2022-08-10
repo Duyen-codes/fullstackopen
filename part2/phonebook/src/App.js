@@ -14,6 +14,7 @@ const App = () => {
   useEffect(() => {
     // get
     personService.getAll().then((response) => {
+      console.log(response.data);
       setPersons(response.data);
     });
   }, []);
@@ -24,7 +25,7 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      id: Math.floor(Math.random() * 1000),
+      id: Math.floor(Math.random() * 100000),
     };
 
     const found = persons.find(
@@ -47,18 +48,24 @@ const App = () => {
       }
     } else {
       // create
-      personService.create(personObject).then((response) => {
-        setPersons(persons.concat(response.data));
-        setNewName("");
-        setNewNumber("");
-        setMessage({
-          content: `${personObject.name} is successfully added to the phonebook`,
-          type: "success",
+      personService
+        .create(personObject)
+        .then((response) => {
+          console.log(response.body);
+          setPersons(persons.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+          setMessage({
+            content: `${personObject.name} is successfully added to the phonebook`,
+            type: "success",
+          });
+          setTimeout(() => {
+            setMessage({});
+          }, 5000);
+        })
+        .catch((error) => {
+          console.log(error.response.data.error);
         });
-        setTimeout(() => {
-          setMessage({});
-        }, 5000);
-      });
     }
   };
 
