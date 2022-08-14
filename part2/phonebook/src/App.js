@@ -10,6 +10,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [searchFilter, setSearchFilter] = useState("");
   const [message, setMessage] = useState({});
+ 
 
   useEffect(() => {
     // get
@@ -118,6 +119,7 @@ const App = () => {
     setSearchFilter(searchTerm);
   };
 
+ 
   return (
     <div>
       <h2>Phonebook</h2>
@@ -145,6 +147,7 @@ const App = () => {
           );
         })}
       </ul>
+
     </div>
   );
 };
