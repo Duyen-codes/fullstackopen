@@ -7,6 +7,7 @@ usersRouter.get('/', async (request, response) => {
 
     // Mongoose join is done with populate method. populate method is chained after the find method
     const users = await User.find({}).populate('blogs', {title: 1, author: 1, url: 1, likes: 1})
+    console.log(users)
     // response.json(users.map(user => user.toJSON()))
     response.json(users)
  })
