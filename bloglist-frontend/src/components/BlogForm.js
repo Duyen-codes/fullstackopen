@@ -15,7 +15,12 @@ const BlogForm = ({ createBlog, setErrorMessage }) => {
   const addBlog = (event) => {
     event.preventDefault();
     createBlog(newBlog);
-    setNewBlog("");
+    setNewBlog({
+      title: "",
+      author: "",
+      url: "",
+      likes: "",
+    });
     setErrorMessage({ type: "info", content: "New blog created" });
     setTimeout(() => {
       setErrorMessage({ type: "", content: "" });
@@ -23,24 +28,38 @@ const BlogForm = ({ createBlog, setErrorMessage }) => {
   };
 
   return (
-    <div>
+    <div className="formDiv">
       <h2>Create New Blog</h2>
       <form onSubmit={addBlog}>
         <div>
           title:
-          <input name="title" onChange={handleBlogChange} />
+          <input
+            name="title"
+            onChange={handleBlogChange}
+            placeholder="write here blog title"
+          />
         </div>
         <div>
           author:
-          <input type="text" name="author" onChange={handleBlogChange} />
+          <input
+            type="text"
+            name="author"
+            onChange={handleBlogChange}
+            id="author"
+          />
         </div>
         <div>
           url:
-          <input name="url" onChange={handleBlogChange} />
+          <input name="url" onChange={handleBlogChange} type="text" id="url" />
         </div>
         <div>
           likes:
-          <input name="likes" onChange={handleBlogChange} />
+          <input
+            name="likes"
+            onChange={handleBlogChange}
+            type="text"
+            id="likes"
+          />
         </div>
         <button type="submit">save</button>
       </form>

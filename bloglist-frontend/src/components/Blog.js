@@ -40,24 +40,21 @@ const Blog = ({ blog, updateLikes, handleDeleteBlog }) => {
   };
 
   return (
-    <div style={blogStyle}>
-      <p>
-        {" "}
-        {blog.title}{" "}
-        <button onClick={() => setVisible(!visible)}>
-          {visible ? "hide" : "view"}
-        </button>
-      </p>
+    <div style={blogStyle} className="blog">
+      <span className="title"> {blog.title} </span>
+      <button onClick={() => setVisible(!visible)}>
+        {visible ? "hide" : "view"}
+      </button>
+      <p className="author">{blog.author}</p>
       {visible && (
         <div>
-          <p>{blog.url}</p>
-          <p>
-            {" "}
+          <p className="url">{blog.url}</p>
+          <span>
             likes
-            {blog.likes}{" "}
-            <button onClick={() => handleAddLikes(blog)}>like</button>
-          </p>
-          <p>{blog.author}</p>
+            {blog.likes}
+          </span>
+          <button onClick={() => handleAddLikes(blog)}>like</button>
+
           <button onClick={() => removeClick(blog)}>remove</button>
         </div>
       )}

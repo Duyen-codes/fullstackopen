@@ -1,4 +1,3 @@
-/* eslint-env node */
 module.exports = {
   env: {
     browser: true,
@@ -27,6 +26,7 @@ module.exports = {
     "react/prop-types": 0,
     "react/react-in-jsx-scope": "off",
   },
+
   settings: {
     react: {
       version: "detect",

@@ -43,6 +43,7 @@ const App = () => {
         username,
         password,
       });
+      console.log(username, password);
       // user is an object (token, username, name)
       setUser(user);
       blogService.setToken(user.token);
