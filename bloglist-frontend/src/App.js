@@ -114,7 +114,7 @@ const App = () => {
             {user.name} logged-in
             <button onClick={handleLogout}>log out</button>
           </p>
-          <Togglable buttonLabel="new note" ref={blogFormRef}>
+          <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm
               createBlog={addBlog}
               errorMessage={errorMessage}
@@ -125,16 +125,18 @@ const App = () => {
       )}
 
       <h2>Blogs</h2>
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          blogs={blogs}
-          setBlogs={setBlogs}
-          updateLikes={updateLikes}
-          handleDeleteBlog={handleDeleteBlog}
-        />
-      ))}
+      <div className="blogs">
+        {blogs.map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            blogs={blogs}
+            setBlogs={setBlogs}
+            updateLikes={updateLikes}
+            handleDeleteBlog={handleDeleteBlog}
+          />
+        ))}
+      </div>
     </div>
   );
 };

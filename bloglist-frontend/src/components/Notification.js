@@ -14,7 +14,10 @@ const Notification = ({ errorMessage, setErrorMessage }) => {
   };
   return (
     <div>
-      <div style={errorMessage.type === "info" ? notiStyle : errorStyle}>
+      <div
+        style={errorMessage.type === "info" ? notiStyle : errorStyle}
+        className="notification"
+      >
         <h2>{errorMessage.content}</h2>
       </div>
     </div>

@@ -54,12 +54,7 @@ const BlogForm = ({ createBlog, setErrorMessage }) => {
         </div>
         <div>
           likes:
-          <input
-            name="likes"
-            onChange={handleBlogChange}
-            type="text"
-            id="likes"
-          />
+          <input name="likes" onChange={handleBlogChange} id="likes" />
         </div>
         <button type="submit">save</button>
       </form>

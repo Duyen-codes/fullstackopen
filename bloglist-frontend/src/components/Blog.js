@@ -40,7 +40,7 @@ const Blog = ({ blog, updateLikes, handleDeleteBlog }) => {
   };
 
   return (
-    <div style={blogStyle} className="blog">
+    <li style={blogStyle} className="blog">
       <span className="title"> {blog.title} </span>
       <button onClick={() => setVisible(!visible)}>
         {visible ? "hide" : "view"}
@@ -58,7 +58,7 @@ const Blog = ({ blog, updateLikes, handleDeleteBlog }) => {
           <button onClick={() => removeClick(blog)}>remove</button>
         </div>
       )}
-    </div>
+    </li>
   );
 };
 
