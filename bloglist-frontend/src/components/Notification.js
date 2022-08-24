@@ -13,13 +13,11 @@ const Notification = ({ errorMessage, setErrorMessage }) => {
     border: "2px solid red",
   };
   return (
-    <div>
-      <div
-        style={errorMessage.type === "info" ? notiStyle : errorStyle}
-        className="notification"
-      >
-        <h2>{errorMessage.content}</h2>
-      </div>
+    <div
+      style={errorMessage.type === "info" ? notiStyle : errorStyle}
+      className="notification"
+    >
+      <h2>{errorMessage.content}</h2>
     </div>
   );
 };

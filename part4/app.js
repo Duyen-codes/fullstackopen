@@ -12,13 +12,6 @@ const middleware = require("./utils/middleware");
 const logger = require("./utils/logger");
 const mongoose = require("mongoose");
 
-// const supertest = require('supertest')
-// http is a Node's built-in web server module
-// const http = require('http'); // load http module
-// import Person module
-// const Blog = require('./models/blog')
-// const url = process.env.MONGODB_URI
-
 logger.info("connecting to", config.MONGODB_URI);
 
 mongoose
@@ -50,5 +43,3 @@ app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
 module.exports = app;
-
-// until 4.22

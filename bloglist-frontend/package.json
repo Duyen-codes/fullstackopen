@@ -51,5 +51,5 @@
   "resolutions": {
     "mini-css-extract-plugin": "2.4.5"
   },
-  "proxy": "http://localhost:3003"
+  "proxy": "http://localhost:3003/"
 }
