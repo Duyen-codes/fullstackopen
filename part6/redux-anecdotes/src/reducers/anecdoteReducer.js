@@ -21,8 +21,6 @@ const initialState = anecdotesAtStart.map(asObject);
 
 // a reducer is a function which is given the current state and an action as params, it returns a new state
 const reducer = (state = initialState, action) => {
-  console.log("state now: ", state);
-  console.log("action", action);
   if (action.type === "VOTE") {
     const id = action.data.id;
     const noteToChange = state.find((n) => n.id === id);
