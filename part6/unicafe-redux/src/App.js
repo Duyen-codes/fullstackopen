@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createStore } from "redux";
-import reducer from "./reducer";
+import reducer from "./reducers/reducer";
 
 const store = createStore(reducer);
 
@@ -29,7 +29,6 @@ const App = () => {
       type: "ZERO",
     });
   };
-
   return (
     <div>
       <button onClick={good}>good</button>
@@ -43,10 +42,4 @@ const App = () => {
   );
 };
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-const renderApp = () => {
-  root.render(<App />);
-};
-
-renderApp();
-store.subscribe(renderApp);
+export default App;
