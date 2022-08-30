@@ -25,6 +25,9 @@ export const setNotification = (text, timer) => {
   console.log("TIMER: ", timer);
   return async (dispatch) => {
     dispatch(displayNotification(text, timer));
+    setTimeout(() => {
+      clearNotification();
+    }, timer);
   };
 };
 export const { displayNotification, clearNotification } =
