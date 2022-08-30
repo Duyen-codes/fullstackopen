@@ -31,6 +31,7 @@ const anecdoteSlice = createSlice({
     },
 
     deleteAnecdote(state, action) {
+      console.log("STATE: ", state);
       console.log("ACTION: ", action);
       const id = action.payload;
       console.log("ID: ", id);

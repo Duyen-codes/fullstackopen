@@ -33,11 +33,7 @@ const AnecdoteList = () => {
   const combineFunctions = async (anecdote) => {
     console.log("ANECDOTE: ", anecdote);
     dispatch(updateAnecdote(anecdote));
-    dispatch(setNotification(anecdote.content));
-    setTimeout(() => {
-      dispatch(clearNotification());
-    }, 5000);
-    dispatch(setNotification(`you voted '${anecdote.content}'`, 10));
+    dispatch(setNotification(`you voted '${anecdote.content}'`, 5000));
   };
 
   const deleteAnecdote = (id) => {
