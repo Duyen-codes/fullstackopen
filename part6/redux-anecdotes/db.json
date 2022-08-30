@@ -1,11 +1,6 @@
 {
   "anecdotes": [
     {
-      "content": "If it hurts, do it more often",
-      "id": "47145",
-      "votes": 5
-    },
-    {
       "content": "Adding manpower to a late software project makes it later!",
       "id": "21149",
       "votes": 1
@@ -29,46 +24,6 @@
       "content": "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
       "id": "98312",
       "votes": 0
-    },
-    {
-      "content": "gdgjdkgdjkg",
-      "votes": 0,
-      "id": "hoMF_zk"
-    },
-    {
-      "content": "gkjdgjkgdljkggljgljljg",
-      "votes": 1,
-      "id": "B2pipBW"
-    },
-    {
-      "content": "adgagag",
-      "votes": 0,
-      "id": "E0wEVKd"
-    },
-    {
-      "content": "A anecdote dispatched from index.js with store.dispatch function",
-      "votes": 0,
-      "id": "u1pOCjn"
-    },
-    {
-      "content": "A anecdote dispatched from index.js with store.dispatch function",
-      "votes": 0,
-      "id": "ztqL7Py"
-    },
-    {
-      "content": "A anecdote dispatched from index.js with store.dispatch function",
-      "votes": 0,
-      "id": "Scq5Irk"
-    },
-    {
-      "content": "gdggagddgagd",
-      "votes": 1,
-      "id": "0tsB3HJ"
-    },
-    {
-      "content": "test notification for new anecdote",
-      "votes": 0,
-      "id": "VHEpOsm"
     }
   ]
 }

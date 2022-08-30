@@ -1,18 +1,20 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAnecdote } from "../reducers/anecdoteReducer";
+import { connect } from "react-redux";
+import { updateAnecdote, removeAnecdote } from "../reducers/anecdoteReducer";
 import {
   setNotification,
   clearNotification,
 } from "../reducers/notificationReducer";
 
-const Anecdote = ({ anecdote, handleClick }) => {
+const Anecdote = ({ anecdote, handleClick, handleDelete }) => {
   return (
     <li>
       <div>{anecdote.content}</div>
       <div>
         has {anecdote.votes}
         <button onClick={() => handleClick(anecdote)}>vote</button>
+        <button onClick={() => handleDelete(anecdote.id)}>delete</button>
       </div>
     </li>
   );
@@ -38,6 +40,9 @@ const AnecdoteList = () => {
     dispatch(setNotification(`you voted '${anecdote.content}'`, 10));
   };
 
+  const deleteAnecdote = (id) => {
+    dispatch(removeAnecdote(id));
+  };
   return (
     <ul>
       {anecdotes.map((anecdote) => (
@@ -45,6 +50,7 @@ const AnecdoteList = () => {
           key={anecdote.id}
           anecdote={anecdote}
           handleClick={() => combineFunctions(anecdote)}
+          handleDelete={() => deleteAnecdote(anecdote.id)}
         />
       ))}
     </ul>

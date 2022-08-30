@@ -23,5 +23,11 @@ const updateVotes = async (id, newObject) => {
   return response.data;
 };
 
+// method for removing an anecdote
+const removeAnecdote = async (id) => {
+  const response = await axios.delete(`${baseUrl}/${id}`);
+  console.log("ID: ", id);
+  return response.data;
+};
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, createNew, updateVotes };
+export default { getAll, createNew, updateVotes, removeAnecdote };

@@ -30,6 +30,13 @@ const anecdoteSlice = createSlice({
       );
     },
 
+    deleteAnecdote(state, action) {
+      console.log("ACTION: ", action);
+      const id = action.payload;
+      console.log("ID: ", id);
+      return state.filter((anecdote) => anecdote.id !== id);
+    },
+
     appendAnecdote(state, action) {
       state.push(action.payload);
     },
@@ -41,7 +48,8 @@ const anecdoteSlice = createSlice({
   },
 });
 
-export const { addVote, appendAnecdote, setAnecdotes } = anecdoteSlice.actions;
+export const { addVote, appendAnecdote, setAnecdotes, deleteAnecdote } =
+  anecdoteSlice.actions;
 
 // with Redux Thunk, it's possible to implement action creators which return a function instead of an object. The function receives Redux store's dispatch and getState methods as params.
 
@@ -72,4 +80,10 @@ export const updateAnecdote = (anecdote) => {
   };
 };
 
+export const removeAnecdote = (id) => {
+  return async (dispatch) => {
+    const response = await anecdoteService.removeAnecdote(id);
+    dispatch(deleteAnecdote(id));
+  };
+};
 export default anecdoteSlice.reducer;
