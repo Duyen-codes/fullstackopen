@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addVote } from "../reducers/anecdoteReducer";
+import { updateAnecdote } from "../reducers/anecdoteReducer";
 import {
-  displayNotification,
+  setNotification,
   clearNotification,
 } from "../reducers/notificationReducer";
 
@@ -29,12 +29,13 @@ const AnecdoteList = () => {
   );
 
   const combineFunctions = async (anecdote) => {
-    console.log("vote clicked");
-    dispatch(addVote(anecdote.id));
-    dispatch(displayNotification(anecdote.content));
+    console.log("ANECDOTE: ", anecdote);
+    dispatch(updateAnecdote(anecdote));
+    dispatch(setNotification(anecdote.content));
     setTimeout(() => {
       dispatch(clearNotification());
-    }, 3000);
+    }, 5000);
+    dispatch(setNotification(`you voted '${anecdote.content}'`, 10));
   };
 
   return (

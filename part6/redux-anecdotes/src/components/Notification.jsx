@@ -12,7 +12,7 @@ const Notification = () => {
   if (notification.length === 0) {
     return "";
   }
-  return <div style={style}>{`You voted '${notification.notification}'`}</div>;
+  return <div style={style}>{`${notification.notification}`}</div>;
 };
 
 export default Notification;
