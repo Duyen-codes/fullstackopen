@@ -91,20 +91,13 @@ const Footer = () => (
 );
 
 const CreateNew = (props) => {
-  // const [content, setContent] = useState("");
-  // const [author, setAuthor] = useState("");
-  // const [info, setInfo] = useState("");
   const content = useField("text");
   const author = useField("text");
   const info = useField("text");
-  console.log("CONTENT: ", content);
-  console.log("AUTHOR: ", author);
-  console.log("INFO: ", info);
 
   const handleSubmit = (e) => {
-    console.log("FORMSUBMIT");
     e.preventDefault();
-    console.log("content: ", content);
+
     props.addNew({
       content: content.value,
       author: author.value,
@@ -113,6 +106,11 @@ const CreateNew = (props) => {
     });
   };
 
+  const handleReset = (e) => {
+    content.onReset();
+    author.onReset();
+    info.onReset();
+  };
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -130,7 +128,9 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
-        <button>reset</button>
+        <button type="button" onClick={handleReset}>
+          reset
+        </button>
       </form>
     </div>
   );
@@ -163,12 +163,12 @@ const App = () => {
   const [notification, setNotification] = useState("");
 
   const addNew = (anecdote) => {
-    console.log("ANECDOTE: ", anecdote);
     anecdote.id = Math.round(Math.random() * 10000);
     setAnecdotes(anecdotes.concat(anecdote));
     navigate("/");
+    setNotification(`A new anecdote ${anecdote.content} created`);
     setTimeout(() => {
-      setNotification(`A new anecdote ${anecdote.contentValue} created`);
+      setNotification("");
     }, 5000);
   };
 
