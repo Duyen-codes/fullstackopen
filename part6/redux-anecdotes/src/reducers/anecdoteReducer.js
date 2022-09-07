@@ -13,9 +13,6 @@ const anecdoteSlice = createSlice({
 
     addVote(state, action) {
       const id = action.payload.id;
-      console.log("ID: ", id);
-      console.log("STATE: ", state);
-      console.log("ACTION: ", action);
       // const anecdoteToChange = state.find((n) => n.id === id);
       const anecdoteToChange = action.payload;
       console.log("anecdoteToChange: ", anecdoteToChange);
@@ -31,8 +28,6 @@ const anecdoteSlice = createSlice({
     },
 
     deleteAnecdote(state, action) {
-      console.log("STATE: ", state);
-      console.log("ACTION: ", action);
       const id = action.payload;
       console.log("ID: ", id);
       return state.filter((anecdote) => anecdote.id !== id);

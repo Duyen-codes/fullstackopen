@@ -34,7 +34,7 @@ test("show url and likes when view button is clicked", async () => {
   const { container } = render(<Blog blog={blog} />);
   const user = userEvent.setup();
   const button = screen.getByText("view");
-  await fireEvent.click(button);
+  fireEvent.click(button);
   expect(screen.getByText("testing.fi")).toBeInTheDocument();
   expect(container).toHaveTextContent("likes");
 });
