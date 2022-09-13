@@ -29,7 +29,6 @@ const anecdoteSlice = createSlice({
 
     deleteAnecdote(state, action) {
       const id = action.payload;
-      console.log("ID: ", id);
       return state.filter((anecdote) => anecdote.id !== id);
     },
 
