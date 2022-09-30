@@ -21,16 +21,49 @@ const favoriteBlog = (blogs) => {
   return { title, author, likes };
 };
 
-const mostBlogs = (blogs) => {
-  // authors array
-  const authors = blogs.map((blog) => blog.author);
-};
-
-const mostLikes = (blogs) => {};
 // 4.6 mostBlogs
 
+const mostBlogs = (blogs) => {
+  let counter = {};
+  for (let i = 0; i < blogs.length; i++) {
+    if (counter[blogs[i].author]) {
+      counter[blogs[i].author] += 1;
+    } else {
+      counter[blogs[i].author] = 1;
+    }
+  }
+
+  const result = Object.entries(counter).reduce(function (prev, curr) {
+    return prev[1] > curr[1]
+      ? { author: prev[0], blogs: prev[1] }
+      : { author: curr[0], blogs: curr[1] };
+  });
+  return result;
+};
+
+// Ex 4.7
+
+const mostLikes = (blogs) => {
+  const reducedArr = blogs.reduce((prev, blog) => {
+    return prev.likes > blog.likes
+      ? {
+          ...prev,
+          author: prev.author,
+          likes: prev.likes,
+        }
+      : {
+          ...prev,
+          author: blog.author,
+          likes: blog.likes,
+        };
+  }, {});
+
+  return reducedArr;
+};
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
+  mostLikes,
 };
