@@ -79,9 +79,9 @@ blogsRouter.delete(
     const userid = user.id;
     const blog = await Blog.findById(request.params.id);
     // since blog.user is an Object, so if you wanna compare the id of the object fetched from the database and a string id, the id fetched from the database must be parsed into a string first
-    if (blog.user.toString() === userid.toString()) {
+    if (blog.user.toString() === userid) {
       await Blog.findByIdAndRemove(request.params.id);
-      response.status(204).json(blog);
+      response.status(204).end();
     } else {
       response.status(401).json({ error: "tokens not matching" });
     }

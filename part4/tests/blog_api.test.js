@@ -1,21 +1,20 @@
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const helper = require("./test_helper");
-require("dotenv").config();
 // import Express application from app.js module, the tests only use the express application defined in the app.js file
 const app = require("../app");
 const api = supertest(app);
 const Blog = require("../models/blog");
 
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then((result) => {
-    console.log("connected to MongoDB");
-  })
+// mongoose
+//   .connect(process.env.MONGODB_URI)
+//   .then((result) => {
+//     console.log("connected to MongoDB");
+//   })
 
-  .catch((error) => {
-    console.log("error connecting to MongoDB:", error.message);
-  });
+//   .catch((error) => {
+//     console.log("error connecting to MongoDB:", error.message);
+//   });
 
 beforeEach(async () => {
   await Blog.deleteMany({}); // database is cleared out at the beginning
