@@ -1,0 +1,3 @@
+[submodule "noteApp"]
+	path = noteApp
+	url = https://github.com/Duyen-codes/noteApp
