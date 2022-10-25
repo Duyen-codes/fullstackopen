@@ -1,3 +1,6 @@
 [submodule "noteApp"]
 	path = noteApp
 	url = https://github.com/Duyen-codes/noteApp
+[submodule "blogListApp"]
+	path = blogListApp
+	url = https://github.com/Duyen-codes/blogListApp
