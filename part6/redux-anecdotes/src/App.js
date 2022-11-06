@@ -1,28 +1,34 @@
-import AnecdoteForm from "./components/AnecdoteForm";
-import AnecdoteList from "./components/AnecdoteList";
-import Notification from "./components/Notification";
-import Filter from "./components/Filter";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { initializeAnecdotes } from "./reducers/anecdoteReducer";
+import { useSelector, useDispatch } from 'react-redux'
 
 const App = () => {
-  const dispatch = useDispatch();
-  // move the initialization of the anecdotes into App component, fetch data from a server, effect hook is used.
+  const anecdotes = useSelector(state => state)
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(initializeAnecdotes());
-  }, [dispatch]);
+  const vote = (id) => {
+    console.log('vote', id)
+  }
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      <Filter />
-      <AnecdoteList />
-      <Notification />
-      <AnecdoteForm />
+      {anecdotes.map(anecdote =>
+        <div key={anecdote.id}>
+          <div>
+            {anecdote.content}
+          </div>
+          <div>
+            has {anecdote.votes}
+            <button onClick={() => vote(anecdote.id)}>vote</button>
+          </div>
+        </div>
+      )}
+      <h2>create new</h2>
+      <form>
+        <div><input /></div>
+        <button>create</button>
+      </form>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
