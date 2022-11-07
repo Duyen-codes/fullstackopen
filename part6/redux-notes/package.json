@@ -39,6 +39,7 @@
     ]
   },
   "devDependencies": {
-    "deep-freeze": "^0.0.1"
+    "deep-freeze": "^0.0.1",
+    "json-server": "^0.17.1"
   }
 }
