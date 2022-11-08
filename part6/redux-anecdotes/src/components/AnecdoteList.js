@@ -5,8 +5,6 @@ import { setNotification } from "../reducers/notificationReducer";
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(({ filter, anecdotes }) => {
-    console.log("anecdotes", anecdotes);
-    console.log("filter", filter);
     if (filter === "") {
       return [...anecdotes].sort((a, b) => {
         return b.votes - a.votes;
@@ -25,6 +23,7 @@ const AnecdoteList = () => {
       dispatch(setNotification(""));
     }, 5000);
   };
+
   return (
     <ul>
       {anecdotes.map((anecdote) => (

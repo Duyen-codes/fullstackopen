@@ -18,7 +18,7 @@ const asObject = (anecdote) => {
   };
 };
 
-const initialState = anecdotesAtStart.map(asObject);
+// const initialState = anecdotesAtStart.map(asObject);
 
 // const reducer = (state = initialState, action) => {
 //   switch (action.type) {
@@ -62,10 +62,9 @@ const generateId = () => Number((Math.random() * 10000).toFixed(0));
 
 const anecdoteSlice = createSlice({
   name: "anecdotes",
-  initialState,
+  initialState: [],
   reducers: {
     addVote(state, action) {
-      console.log("action.payload", action.payload);
       const id = action.payload.id;
       const anecdoteToChange = state.find((anecdote) => anecdote.id === id);
       const changedAnecdote = {
@@ -77,17 +76,14 @@ const anecdoteSlice = createSlice({
       );
     },
     createAnecdote(state, action) {
-      const content = action.payload;
-      console.log("action.payload createAnecdote", action.payload);
-      const newAnecdote = {
-        content,
-        votes: 0,
-        id: generateId(),
-      };
-      state.push(newAnecdote);
+      state.push(action.payload);
+    },
+
+    setAnecdotes(state, action) {
+      return action.payload;
     },
   },
 });
 
-export const { addVote, createAnecdote } = anecdoteSlice.actions;
+export const { addVote, createAnecdote, setAnecdotes } = anecdoteSlice.actions;
 export default anecdoteSlice.reducer;
