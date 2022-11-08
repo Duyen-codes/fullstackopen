@@ -39,6 +39,11 @@
       "content": "let see",
       "votes": 0,
       "id": "o0CMnyh"
+    },
+    {
+      "content": "is creating an anecdote with redux thunk working",
+      "votes": 0,
+      "id": "y-BfPtK"
     }
   ]
 }
