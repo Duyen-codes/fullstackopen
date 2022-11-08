@@ -22,10 +22,7 @@ const notificationSlice = createSlice({
 
 let timeoutId;
 export const setNotification = (text, timer) => {
-  console.log("TEXT: ", text);
-  console.log("TIMER: ", timer);
   return (dispatch) => {
-    console.log("TIMEOUTID: ", timeoutId);
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
