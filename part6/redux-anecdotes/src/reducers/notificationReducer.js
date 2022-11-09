@@ -16,7 +16,7 @@ const notificationSlice = createSlice({
 
 let timeoutId;
 export const setNotification = (text, timer) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     if (timeoutId) {
       clearTimeout(timeoutId);
     }

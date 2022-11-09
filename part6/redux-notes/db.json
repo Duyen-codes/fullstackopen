@@ -34,6 +34,16 @@
       "content": "hhh",
       "important": false,
       "id": 7
+    },
+    {
+      "content": "is note working creted",
+      "important": false,
+      "id": 8
+    },
+    {
+      "content": "mapDispatchToProps",
+      "important": false,
+      "id": 9
     }
   ]
 }

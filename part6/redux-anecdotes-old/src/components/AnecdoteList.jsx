@@ -2,10 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { connect } from "react-redux";
 import { updateAnecdote, removeAnecdote } from "../reducers/anecdoteReducer";
-import {
-  setNotification,
-  clearNotification,
-} from "../reducers/notificationReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 const Anecdote = ({ anecdote, handleClick, handleDelete }) => {
   return (
@@ -31,7 +28,6 @@ const AnecdoteList = () => {
   );
 
   const combineFunctions = async (anecdote) => {
-    console.log("ANECDOTE: ", anecdote);
     dispatch(updateAnecdote(anecdote));
     dispatch(setNotification(`you voted '${anecdote.content}'`, 5000));
   };

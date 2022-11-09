@@ -61,7 +61,7 @@ const noteSlice = createSlice({
       state.push(action.payload);
     },
 
-    toggleImportanceOf(state, action) {
+    toggleNoteImportance(state, action) {
       const changedNote = action.payload;
       const id = action.payload.id;
       return state.map((note) => (note.id !== id ? note : changedNote));
@@ -86,5 +86,15 @@ export const createNote = (content) => {
     dispatch(appendNote(newNote));
   };
 };
-export const { appendNote, toggleImportanceOf, setNotes } = noteSlice.actions;
+
+export const toggleImportanceOf = (changedNote) => {
+  return async (dispatch) => {
+    const returnedNote = await noteService.toggleImportance(
+      changedNote.id,
+      changedNote
+    );
+    dispatch(toggleNoteImportance(returnedNote));
+  };
+};
+export const { appendNote, toggleNoteImportance, setNotes } = noteSlice.actions;
 export default noteSlice.reducer;
