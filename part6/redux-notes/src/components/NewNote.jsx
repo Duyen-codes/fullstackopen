@@ -4,8 +4,6 @@ import { createNote } from "../reducers/noteReducer";
 import { connect } from "react-redux";
 
 const NewNote = (props) => {
-  console.log("createNote", createNote);
-  console.log("props.createNote", props.createNote);
   // const dispatch = useDispatch();
 
   const addNote = async (event) => {

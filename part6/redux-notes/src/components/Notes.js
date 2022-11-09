@@ -14,7 +14,7 @@ const Note = ({ note, handleClick }) => {
 };
 
 const Notes = (props) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // const notes = useSelector(({ filter, notes }) => {
   //   if (filter === "ALL") {
   //     return notes;
