@@ -27,7 +27,7 @@ const useResource = (baseUrl) => {
 
   const getAll = async () => {
     const response = await axios.get(baseUrl);
-    return response.data;
+    setResources(response.data);
   };
   const create = async (resource) => {
     // ...
@@ -35,7 +35,7 @@ const useResource = (baseUrl) => {
       headers: { Authorization: token },
     };
     const response = await axios.post(baseUrl, resource, config);
-    return response.data;
+    setResources([...resources, response.data]);
   };
 
   const update = async (id, resource) => {
@@ -71,6 +71,10 @@ const App = () => {
     personService.create({ name: name.value, number: number.value });
   };
 
+  useEffect(() => {
+    noteService.getAll();
+    personService.getAll();
+  }, []);
   return (
     <div>
       <h2>notes</h2>

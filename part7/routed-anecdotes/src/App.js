@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  useNavigate,
-  useMatch,
-} from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useMatch } from "react-router-dom";
 // import custom hook useField
 import { useField } from "./hooks";
 
@@ -43,7 +36,6 @@ const AnecdoteList = ({ anecdotes }) => (
 );
 
 const Anecdote = ({ anecdote }) => {
-  console.log("ANECDOTE: ", anecdote);
   return (
     <div>
       <h2>{anecdote.content}</h2>

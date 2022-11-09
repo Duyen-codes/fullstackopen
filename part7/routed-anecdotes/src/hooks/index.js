@@ -1,4 +1,3 @@
-// natural place to save custom hooks of your application
 import { useState } from "react";
 
 export const useField = (type) => {
