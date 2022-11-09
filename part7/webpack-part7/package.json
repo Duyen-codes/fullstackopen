@@ -3,7 +3,8 @@
     "version": "0.0.1",
     "description": "practising webpack",
     "scripts": {
-        "build": "webpack --mode=development"
+        "build": "webpack --mode=development",
+        "start": "webpack server --mode=development"
     },
     "license": "MIT",
     "devDependencies": {
