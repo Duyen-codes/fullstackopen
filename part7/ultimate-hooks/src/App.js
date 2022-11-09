@@ -15,41 +15,27 @@ const useField = (type) => {
   };
 };
 
-// useResouce custom hook returns an array of 2 items just like the state hooks.
+// useResource custom hook returns an array of 2 items just like the state hooks.
 const useResource = (baseUrl) => {
   const [resources, setResources] = useState([]);
-
-  // ...
-  let token = null;
-  const setToken = (newToken) => {
-    token = `bearer ${newToken}`;
-  };
 
   const getAll = async () => {
     const response = await axios.get(baseUrl);
     setResources(response.data);
   };
   const create = async (resource) => {
-    // ...
-    const config = {
-      headers: { Authorization: token },
-    };
-    const response = await axios.post(baseUrl, resource, config);
+    const response = await axios.post(baseUrl, resource);
     setResources([...resources, response.data]);
-  };
-
-  const update = async (id, resource) => {
-    const response = await axios.put(`${baseUrl}/${id}`, resource);
-    return response.data;
   };
 
   const service = {
     create,
     getAll,
-    update,
-    setToken,
   };
 
+  useEffect(() => {
+    getAll();
+  }, []);
   return [resources, service];
 };
 
@@ -71,10 +57,6 @@ const App = () => {
     personService.create({ name: name.value, number: number.value });
   };
 
-  useEffect(() => {
-    noteService.getAll();
-    personService.getAll();
-  }, []);
   return (
     <div>
       <h2>notes</h2>
