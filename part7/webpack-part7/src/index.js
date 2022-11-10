@@ -5,7 +5,4 @@ import "core-js/stable/index.js";
 import "regenerator-runtime/runtime.js";
 import "./index.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <App />,
-  document.getElementById("root")
-);
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
