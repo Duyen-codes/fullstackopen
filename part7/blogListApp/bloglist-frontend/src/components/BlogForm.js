@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const BlogForm = ({ createBlog, setErrorMessage }) => {
+const BlogForm = ({ createBlog }) => {
   const [newBlog, setNewBlog] = useState({
     title: "",
     author: "",
@@ -21,10 +21,6 @@ const BlogForm = ({ createBlog, setErrorMessage }) => {
       url: "",
       likes: "",
     });
-    setErrorMessage({ type: "info", content: "New blog created" });
-    setTimeout(() => {
-      setErrorMessage({ type: "", content: "" });
-    }, 5000);
   };
 
   return (
