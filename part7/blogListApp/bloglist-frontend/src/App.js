@@ -5,8 +5,8 @@ import LoginForm from "./components/LoginForm";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 
-import blogService from "./services/blogs";
-import loginService from "./services/login";
+// import blogService from "./services/blogs";
+// import loginService from "./services/login";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -15,26 +15,39 @@ import {
 } from "./reducers/notificationReducer";
 import {
   initializeBlogs,
-  setBlogs,
   createBlog,
   addLike,
-  removeBlog,
   deleteBlog,
 } from "./reducers/blogReducer";
+
+import { initializeLoggedInUser, logout, login } from "./reducers/loginReducer";
+
+import { Routes, Route, Link, useMatch, useNavigate } from "react-router-dom";
+import Users from "./components/Users";
+import User from "./components/User";
+
+import BlogSingle from "./components/BlogSingle";
+import Blogs from "./components/Blogs";
+import Home from "./components/Home";
+
+import { Container } from "@mui/material";
+import Navigation from "./components/Navigation";
 
 const App = () => {
   // const [blogs, setBlogs] = useState([]);
   // const [notification, setNotification] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
 
-  const byLikes = (blog1, blog2) => (blog2.likes > blog1.likes ? 1 : -1);
+  // const byLikes = (blog1, blog2) => (blog2.likes > blog1.likes ? 1 : -1);
 
   const dispatch = useDispatch();
   const notification = useSelector((state) => state.notification);
   const blogs = useSelector((state) => state.blogs);
+  const user = useSelector((state) => state.loggedInUser);
 
+  const navigate = useNavigate();
   // get blogs
   useEffect(() => {
     // blogService.getAll().then((blogs) => {
@@ -47,43 +60,40 @@ const App = () => {
 
   // get user
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
-    }
+    // const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
+    // if (loggedUserJSON) {
+    //   const user = JSON.parse(loggedUserJSON);
+    //   dispatch(setUser(user));
+    //   blogService.setToken(user.token);
+    // }
+    dispatch(initializeLoggedInUser());
   }, []);
 
   // handle login
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
+      // const user = await loginService.login({
+      //   username,
+      //   password,
+      // });
 
-      // user is an object (token, username, name)
-      blogService.setToken(user.token);
-      setUser(user);
+      // // user is an object (token, username, name)
+      // blogService.setToken(user.token);
+      // setUser(user);
 
-      window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
+      // window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
+      dispatch(login(username, password));
       setUsername("");
       setPassword("");
       // setNotification({ type: "info", message: "Login success" });
       dispatch(setNotification("info", "Login success"));
-
+      navigate("/");
       setTimeout(() => {
         dispatch(clearNotification());
       }, 3000);
     } catch (exception) {
-      dispatch(
-        setNotification({
-          type: "error",
-          message: "Wrong username or password",
-        })
-      );
+      dispatch(setNotification("error", "Wrong username or password"));
       setTimeout(() => {
         dispatch(clearNotification());
       }, 3000);
@@ -92,9 +102,10 @@ const App = () => {
 
   // handle logout
   const handleLogout = () => {
-    window.localStorage.removeItem("loggedBlogAppUser");
-    blogService.setToken(null);
-    setUser(null);
+    // window.localStorage.removeItem("loggedBlogAppUser");
+    // blogService.setToken(null);
+    // setUser(null);
+    dispatch(logout());
   };
 
   // add blog
@@ -141,11 +152,20 @@ const App = () => {
   };
 
   const blogFormRef = useRef();
+
+  // const match = useMatch('/blogs/:id')
+
+  // const blog = match ? useSelector(state => state.blogs.find(blog => {
+  //   return blog.id === (match.params.id)
+  // })) : null
+  // console.log('blog', blog);
+
   return (
-    <div>
+    <Container>
+      <Navigation user={user} />
       <h1>Blogs Application MERN stack</h1>
       {<Notification notification={notification} />}
-      {user === null ? (
+      {/* {user === null && (
         <Togglable buttonLabel="login">
           <LoginForm
             username={username}
@@ -155,7 +175,8 @@ const App = () => {
             handleLogin={handleLogin}
           />
         </Togglable>
-      ) : (
+      )} */}
+      {user !== null && (
         <div>
           <p>
             {user.name} logged-in
@@ -171,20 +192,31 @@ const App = () => {
         </div>
       )}
 
-      <h2>Blogs</h2>
-      <div className="blogs">
-        {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            blogs={blogs}
-            // setBlogs={setBlogs}
-            likeBlog={likeBlog}
-            removeBlog={removeBlog}
-          />
-        ))}
-      </div>
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/users" element={<Users />}>
+          {" "}
+        </Route>
+        <Route path="/blogs" element={<Blogs blogs={blogs} />}></Route>
+        <Route path="/users/:id" element={<User />}></Route>
+        <Route
+          path="/blogs/:id"
+          element={<BlogSingle likeBlog={likeBlog} removeBlog={removeBlog} />}
+        ></Route>
+        <Route
+          path="/login"
+          element={
+            <LoginForm
+              handleLogin={handleLogin}
+              username={username}
+              password={password}
+              setUsername={setUsername}
+              setPassword={setPassword}
+            />
+          }
+        ></Route>
+      </Routes>
+    </Container>
   );
 };
 

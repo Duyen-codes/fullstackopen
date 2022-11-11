@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Blog = ({ blog, likeBlog, removeBlog }) => {
   const [visible, setVisible] = useState(false);
@@ -14,9 +15,15 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
   const handleVisibility = () => {
     setVisible(!visible);
   };
+  if (!blog) {
+    return null;
+  }
   return (
     <li style={blogStyle} className="blog">
-      <span className="title"> {blog.title} </span>
+      <Link className="title" to={`/blogs/${blog.id}`}>
+        {" "}
+        {blog.title}{" "}
+      </Link>
       <button onClick={handleVisibility}>{visible ? "hide" : "view"}</button>
       <p className="author">{blog.author}</p>
       {visible && (
