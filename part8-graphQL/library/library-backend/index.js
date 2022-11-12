@@ -93,9 +93,30 @@ let books = [
 ];
 
 const typeDefs = gql`
+  type Author {
+    name: String!
+    id: ID!
+    born: String
+  }
+
+  type Book {
+    title: String
+    published: String
+    author: String
+    id: ID!
+    genres: [String]
+  }
+
   type Query {
     authorCount: Int!
     bookCount: Int!
+    allAuthors(born: YesNo): [Author]!
+    allBooks: [Book]!
+  }
+
+  enum YesNo {
+    YES
+    NO
   }
 `;
 
@@ -103,6 +124,8 @@ const resolvers = {
   Query: {
     authorCount: () => authors.length,
     bookCount: () => books.length,
+    allAuthors: () => authors,
+    allBooks: () => books,
   },
 };
 
