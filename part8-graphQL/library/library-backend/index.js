@@ -95,23 +95,18 @@ let books = [
 const typeDefs = gql`
   type Author {
     name: String!
-    id: ID!
-    born: String
+    bookCount: Int!
   }
 
   type Book {
     title: String
-    published: String
-    author: String
-    id: ID!
-    genres: [String]
   }
 
   type Query {
     authorCount: Int!
     bookCount: Int!
-    allAuthors(born: YesNo): [Author]!
-    allBooks: [Book]!
+    allAuthors: [Author]!
+    allBooks(author: String!): [Book]
   }
 
   enum YesNo {
@@ -125,7 +120,12 @@ const resolvers = {
     authorCount: () => authors.length,
     bookCount: () => books.length,
     allAuthors: () => authors,
-    allBooks: () => books,
+    allBooks: (root, args) => {
+      if (!args.author) {
+        return books;
+      }
+      return books.filter((book) => book.author === args.author);
+    },
   },
 };
 
