@@ -1,7 +1,13 @@
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-import { ApolloClient, HttpLink, InMemoryCache, gql } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+  gql,
+} from "@apollo/client";
 
 // create a new client object, which is then used to send a query to the server
 const client = new ApolloClient({
@@ -29,4 +35,8 @@ client.query({ query }).then((response) => {
   console.log(response.data);
 });
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>
+);
