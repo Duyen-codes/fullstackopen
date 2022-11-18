@@ -10,7 +10,7 @@ const App = () => {
 	const result = useQuery(ALL_AUTHORS);
 	const bookResult = useQuery(ALL_BOOKS);
 
-	if (result.loading && bookResult.loading) {
+	if (result.loading || bookResult.loading) {
 		return <div>loading...</div>;
 	}
 	return (
