@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 import { useMutation } from '@apollo/client'
 
-const Authors = ({ setError, show, authors }) => {
+const Authors = ({ show, authors }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
 
@@ -10,14 +10,8 @@ const Authors = ({ setError, show, authors }) => {
     refetchQueries: [{ query: ALL_AUTHORS }],
   })
 
-  useEffect(() => {
-    if (result.data && result.data.editAuthor === null) {
-      setError('author not found')
-    }
-  }, [result.data, setError])
   const submit = (event) => {
     event.preventDefault()
-    console.log('submited')
     editAuthor({ variables: { name, setBornTo: parseInt(born) } })
     setName('')
     setBorn('')
