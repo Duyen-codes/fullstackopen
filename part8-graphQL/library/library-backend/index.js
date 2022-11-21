@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 
 const Book = require("./models/book");
 const Author = require("./models/author");
+const User = require("./models/user");
 
 const MONGODB_URI =
 	"mongodb+srv://libraryApp:libraryApp@cluster0.kcoos1o.mongodb.net/libraryApp?retryWrites=true&w=majority";
@@ -123,11 +124,22 @@ const typeDefs = gql`
 		NO
 	}
 
+	type User {
+		username: String!
+		favoriteGenre: String!
+		id: ID!
+	}
+
+	type Token {
+		value: String!
+	}
+
 	type Query {
 		authorCount: Int!
 		bookCount: Int!
 		allAuthors(name: String, born: YesNo, bookCount: Int): [Author!]!
 		allBooks(author: String, genres: String): [Book!]!
+		me: User
 	}
 
 	type Mutation {
@@ -139,6 +151,10 @@ const typeDefs = gql`
 		): Book!
 
 		editAuthor(name: String!, setBornTo: Int!): Author
+
+		createUser(username: String!, favoriteGenre: String!): User
+
+		login(username: String!, password: String!): Token
 	}
 `;
 
@@ -218,6 +234,34 @@ const resolvers = {
 				author.name === args.name ? updatedAuthor : author,
 			);
 			return updatedAuthor;
+		},
+
+		// resolver of createUser mutation
+		createUser: async (root, args) => {
+			const user = new User({
+				username: args.username,
+				favoriteGenre: args.favoriteGenre,
+			});
+
+			return user.save().catch((error) => {
+				throw new UserInputError(error.message, {
+					invalidArgs: args,
+				});
+			});
+		},
+
+		// resolver of login mutation
+		login: async (root, args) => {
+			const user = User.findOne({ username: args.username });
+			if (!user || args.password !== "secret") {
+				throw new UserInputError("wrong credentials");
+			}
+
+			const userForToken = {
+				username: user.username,
+				id: user._id,
+			};
+			return { value: jwt.sign(userForToken, JWT_SECRET) };
 		},
 	},
 };
