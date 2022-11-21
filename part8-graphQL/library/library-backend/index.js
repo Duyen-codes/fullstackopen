@@ -1,4 +1,9 @@
-const { ApolloServer, gql, UserInputError } = require("apollo-server");
+const {
+	ApolloServer,
+	gql,
+	UserInputError,
+	AuthenticationError,
+} = require("apollo-server");
 const { v1: uuid } = require("uuid");
 
 const jwt = require("jsonwebtoken");
@@ -200,9 +205,12 @@ const resolvers = {
 		},
 	},
 	Mutation: {
-		addBook: async (root, args) => {
+		addBook: async (root, args, context) => {
 			const book = new Book({ ...args });
 			const author = { name: args.author, born: args.born || null };
+
+			const currentUser = context.currentUser;
+
 			if (book.title.length < 2) {
 				throw new UserInputError(
 					"book title must be at least 2 character long",
@@ -212,6 +220,10 @@ const resolvers = {
 				throw new UserInputError(
 					"author name must be at least 4 character long",
 				);
+			}
+
+			if (!currentUser) {
+				throw new AuthenticationError("not authenticated");
 			}
 			try {
 				await book.save();
@@ -224,16 +236,25 @@ const resolvers = {
 			return book;
 		},
 
-		editAuthor: (root, args) => {
-			const author = authors.find((author) => author.name === args.name);
+		editAuthor: async (root, args, { currentUser }) => {
+			if (!currentUser) {
+				throw new AuthenticationError("not authenticated");
+			}
+
+			const author = await Author.findOne({ name: args.name });
 			if (!author) {
 				return null;
 			}
-			const updatedAuthor = { ...author, born: args.setBornTo };
-			authors = authors.map((author) =>
-				author.name === args.name ? updatedAuthor : author,
-			);
-			return updatedAuthor;
+
+			author.born = args.setBornTo;
+			try {
+				await author.save();
+			} catch (error) {
+				throw new UserInputError(error.message, {
+					invalidArgs: args,
+				});
+			}
+			return author;
 		},
 
 		// resolver of createUser mutation
@@ -269,6 +290,16 @@ const resolvers = {
 const server = new ApolloServer({
 	typeDefs,
 	resolvers,
+	context: async ({ req }) => {
+		const auth = req ? req.headers.authorization : null;
+		console.log("auth", auth);
+		if (auth && auth.toLowerCase().startsWith("bearer ")) {
+			const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
+			const currentUser = await User.findById(decodedToken.id);
+			console.log("currentUser", currentUser);
+			return { currentUser };
+		}
+	},
 });
 
 server.listen().then(({ url }) => {
