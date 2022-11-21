@@ -1,5 +1,28 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, gql, UserInputError } = require("apollo-server");
 const { v1: uuid } = require("uuid");
+
+const jwt = require("jsonwebtoken");
+
+const JWT_SECRET = "TOP_SECRET";
+
+const mongoose = require("mongoose");
+
+const Book = require("./models/book");
+const Author = require("./models/author");
+
+const MONGODB_URI =
+	"mongodb+srv://libraryApp:libraryApp@cluster0.kcoos1o.mongodb.net/libraryApp?retryWrites=true&w=majority";
+
+console.log("connecting to", MONGODB_URI);
+
+mongoose
+	.connect(MONGODB_URI)
+	.then(() => {
+		console.log("connected to MongoDB");
+	})
+	.catch((error) => {
+		console.log("error connection to MongoDB: ", error.message);
+	});
 
 let authors = [
 	{
@@ -26,20 +49,6 @@ let authors = [
 		id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
 	},
 ];
-
-/*
- * Suomi:
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
- *
- * English:
- * It might make more sense to associate a book with its author by storing the author's id in the context of the book instead of the author's name
- * However, for simplicity, we will store the author's name in connection with the book
- *
- * Spanish:
- * Podría tener más sentido asociar un libro con su autor almacenando la id del autor en el contexto del libro en lugar del nombre del autor
- * Sin embargo, por simplicidad, almacenaremos el nombre del autor en conección con el libro
- */
 
 let books = [
 	{
@@ -102,10 +111,10 @@ const typeDefs = gql`
 	}
 
 	type Book {
-		title: String
-		author: String
-		published: Int
-		genres: [String]
+		title: String!
+		published: Int!
+		author: Author
+		genres: [String!]!
 		id: ID!
 	}
 
@@ -117,17 +126,17 @@ const typeDefs = gql`
 	type Query {
 		authorCount: Int!
 		bookCount: Int!
-		allAuthors(name: String, born: YesNo, bookCount: Int): [Author]
-		allBooks(author: String, genres: String): [Book]
+		allAuthors(name: String, born: YesNo, bookCount: Int): [Author!]!
+		allBooks(author: String, genres: String): [Book!]!
 	}
 
 	type Mutation {
 		addBook(
-			title: String
-			author: String
-			published: Int
-			genres: [String]
-		): Book
+			title: String!
+			author: String!
+			published: Int!
+			genres: [String!]!
+		): Book!
 
 		editAuthor(name: String!, setBornTo: Int!): Author
 	}
@@ -135,11 +144,14 @@ const typeDefs = gql`
 
 const resolvers = {
 	Query: {
-		authorCount: () => authors.length,
-		bookCount: () => books.length,
-		allAuthors: () => {
+		authorCount: async () => Author.collection.countDocuments(),
+		bookCount: async () => Book.collection.countDocuments(),
+		allAuthors: async () => {
 			let counter = [];
-			for (let i = 0; i < books.length; i++) {
+			const bookLength = await Book.collection.countDocuments();
+			const books = await Book.find({});
+			const authors = await Author.find({});
+			for (let i = 0; i < bookLength; i++) {
 				if (counter[books[i].author]) {
 					counter[books[i].author] += 1;
 				} else {
@@ -153,30 +165,46 @@ const resolvers = {
 			}));
 			return reformattedArray;
 		},
-		allBooks: (root, args) => {
+		allBooks: async (root, args) => {
 			if (!args.author && !args.genres) {
-				return books;
+				return Book.find({});
 			}
 			if (!args.author && args.genres) {
-				return books.filter((book) => book.genres.includes(args.genres));
+				return Book.find({ genres: { $in: [args.genres] } });
 			}
 			if (args.author && !args.genres) {
-				return books.filter((book) => book.author === args.author);
+				return Book.find({ author: { $in: [args.author] } });
 			}
 			if (args.author && args.genres) {
-				return books.filter(
-					(book) =>
-						book.author === args.author && book.genres.includes(args.genres),
-				);
+				return Book.find({
+					author: { $in: [args.author] },
+					genres: { $in: [args.genres] },
+				});
 			}
 		},
 	},
 	Mutation: {
-		addBook: (root, args) => {
-			const book = { ...args, id: uuid() };
-			const author = { name: args.author, born: args.born || null, id: uuid() };
-			books = books.concat(book);
-			authors = authors.concat(author);
+		addBook: async (root, args) => {
+			const book = new Book({ ...args });
+			const author = { name: args.author, born: args.born || null };
+			if (book.title.length < 2) {
+				throw new UserInputError(
+					"book title must be at least 2 character long",
+				);
+			}
+			if (author.name.length < 4) {
+				throw new UserInputError(
+					"author name must be at least 4 character long",
+				);
+			}
+			try {
+				await book.save();
+				await author.save();
+			} catch (error) {
+				throw new UserInputError(error.message, {
+					invalidArgs: args,
+				});
+			}
 			return book;
 		},
 
