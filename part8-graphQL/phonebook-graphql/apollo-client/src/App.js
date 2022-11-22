@@ -4,10 +4,12 @@ import { useQuery } from "@apollo/client";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import PhoneForm from "./components/PhoneForm";
+import LoginForm from "./components/LoginForm";
 
 import { ALL_PERSONS } from "./queries";
 
 const App = () => {
+	const [token, setToken] = useState(null); // when user is logged in, token state will contain a user token
 	const [errorMessage, setErrorMessage] = useState(null);
 	const result = useQuery(ALL_PERSONS);
 	console.log("result", result);
@@ -22,6 +24,17 @@ const App = () => {
 			setErrorMessage(null);
 		}, 10000);
 	};
+
+	// if token is undefined, render LoginForm component for user login
+	if (!token) {
+		return (
+			<div>
+				<Notify errorMessage={errorMessage} />
+				<h2>Login</h2>
+				<LoginForm setToken={setToken} setError={notify} />
+			</div>
+		);
+	}
 
 	return (
 		<div>
