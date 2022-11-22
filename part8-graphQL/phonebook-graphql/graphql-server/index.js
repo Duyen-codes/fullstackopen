@@ -167,6 +167,7 @@ const resolvers = {
 			});
 		},
 
+		// resolver for login mutation
 		login: async (root, args) => {
 			const user = await User.findOne({ username: args.username });
 
