@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../queries";
 
@@ -12,9 +12,11 @@ const LoginForm = ({ setError, setToken }) => {
 		},
 	});
 
+	console.log("result.data", result.data);
 	useEffect(() => {
 		if (result.data) {
 			const token = result.data.login.value;
+			console.log("token", token);
 			setToken(token);
 			localStorage.setItem("phonenumbers-user-token", token);
 		}

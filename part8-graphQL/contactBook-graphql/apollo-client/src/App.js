@@ -12,10 +12,10 @@ const App = () => {
 	const [token, setToken] = useState(null); // when user is logged in, token state will contain a user token
 	const [errorMessage, setErrorMessage] = useState(null);
 	const result = useQuery(ALL_PERSONS);
-	console.log("result", result);
 
 	const client = useApolloClient();
 
+	console.log("token in App.js", token);
 	if (result.loading) {
 		return <div>loading...</div>;
 	}
@@ -36,11 +36,11 @@ const App = () => {
 	// if token is undefined, render LoginForm component for user login
 	if (!token) {
 		return (
-			<div>
+			<>
 				<Notify errorMessage={errorMessage} />
 				<h2>Login</h2>
 				<LoginForm setToken={setToken} setError={notify} />
-			</div>
+			</>
 		);
 	}
 

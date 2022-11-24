@@ -51,6 +51,16 @@ let persons = [
 ];
 
 const typeDefs = gql`
+	type User {
+		username: String!
+		friends: [Person!]!
+		id: ID!
+	}
+
+	type Token {
+		value: String!
+	}
+
 	type Address {
 		street: String!
 		city: String!
@@ -66,16 +76,6 @@ const typeDefs = gql`
 	enum YesNo {
 		YES
 		NO
-	}
-
-	type User {
-		username: String!
-		friends: [Person!]!
-		id: ID!
-	}
-
-	type Token {
-		value: String!
 	}
 
 	type Query {
@@ -106,12 +106,15 @@ const typeDefs = gql`
 const resolvers = {
 	Query: {
 		personCount: async () => Person.collection.countDocuments(),
+
 		allPersons: async (root, args) => {
 			if (!args.phone) {
 				return Person.find({});
 			}
+
 			return Person.find({ phone: { $exists: args.phone === "YES" } });
 		},
+
 		findPerson: async (root, args) => Person.findOne({ name: args.name }),
 
 		me: (root, args, context) => {
@@ -128,12 +131,16 @@ const resolvers = {
 	},
 	Mutation: {
 		addPerson: async (root, args, context) => {
-			const person = new Person({ ...args });
+			console.log("context", context);
 			const currentUser = context.currentUser;
+			console.log("currentUser", currentUser);
 
 			if (!currentUser) {
 				throw new AuthenticationError("not authenticated");
 			}
+
+			const person = new Person({ ...args });
+			console.log("person", person);
 
 			try {
 				await person.save();
@@ -149,6 +156,7 @@ const resolvers = {
 		editNumber: async (root, args) => {
 			const person = await Person.findOne({ name: args.name });
 			person.phone = args.phone;
+
 			try {
 				await person.save();
 			} catch (error) {
@@ -183,6 +191,7 @@ const resolvers = {
 		},
 
 		addAsFriend: async (root, args, { currentUser }) => {
+			console.log("currentUser", currentUser);
 			const isFriend = (person) =>
 				currentUser.friends
 					.map((f) => f._id.toString())
@@ -193,6 +202,7 @@ const resolvers = {
 			}
 
 			const person = await Person.findOne({ name: args.name });
+
 			if (!isFriend(person)) {
 				currentUser.friends = currentUser.friends.concat(person);
 			}
@@ -207,12 +217,15 @@ const server = new ApolloServer({
 	typeDefs,
 	resolvers,
 	context: async ({ req }) => {
-		const auth = req ? req.header.authorization : null;
+		const auth = req ? req.headers.authorization : null;
+		console.log("authorization", req.headers.authorization);
+
 		if (auth && auth.toLowerCase().startsWith("bearer ")) {
 			const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
 			const currentUser = await User.findById(decodedToken.id).populate(
 				"friends",
 			);
+			console.log("currentUser context", currentUser);
 			return { currentUser };
 		}
 	},

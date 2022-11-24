@@ -11,7 +11,9 @@ const PhoneForm = ({ setError }) => {
 
 	const submit = (event) => {
 		event.preventDefault();
+
 		changeNumber({ variables: { name, phone } });
+
 		setName("");
 		setPhone("");
 	};
@@ -21,6 +23,7 @@ const PhoneForm = ({ setError }) => {
 			setError("person not found");
 		}
 	}, [result.data]);
+
 	return (
 		<div>
 			<h2>change number</h2>
