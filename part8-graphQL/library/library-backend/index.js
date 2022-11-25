@@ -4,7 +4,6 @@ const {
 	UserInputError,
 	AuthenticationError,
 } = require("apollo-server");
-const { v1: uuid } = require("uuid");
 
 const jwt = require("jsonwebtoken");
 
@@ -110,7 +109,7 @@ let books = [
 
 const typeDefs = gql`
 	type Author {
-		name: String!
+		name: String
 		born: Int
 		bookCount: Int
 		id: ID!
@@ -172,6 +171,7 @@ const resolvers = {
 			const bookLength = await Book.collection.countDocuments();
 			const books = await Book.find({});
 			const authors = await Author.find({});
+			console.log("authors from db", authors);
 			for (let i = 0; i < bookLength; i++) {
 				if (counter[books[i].author]) {
 					counter[books[i].author] += 1;
@@ -182,8 +182,9 @@ const resolvers = {
 
 			const reformattedArray = authors.map((author) => ({
 				...author,
-				bookCount: counter[author.name],
+				bookCount: counter[author.name] || 0,
 			}));
+			console.log("reformattedArray", reformattedArray);
 			return reformattedArray;
 		},
 		allBooks: async (root, args) => {
