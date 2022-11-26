@@ -167,31 +167,29 @@ const resolvers = {
 		authorCount: async () => Author.collection.countDocuments(),
 		bookCount: async () => Book.collection.countDocuments(),
 		allAuthors: async () => {
-			let counter = [];
-			const bookLength = await Book.collection.countDocuments();
-			const books = await Book.find({}).populate("author", { name: 1 });
-			console.log("books", books);
-			const authors = await Author.find({});
-			console.log("authors", authors);
+			// let counter = [];
+			// const bookLength = await Book.collection.countDocuments();
+			// const books = await Book.find({}).populate("author", { name: 1 });
 
-			for (let i = 0; i < bookLength; i++) {
-				if (counter[books[i].author.name]) {
-					counter[books[i].author.name] += 1;
-				} else {
-					counter[books[i].author.name] = 1;
-				}
-			}
+			// const authors = await Author.find({});
 
-			console.log("counter", counter);
+			// for (let i = 0; i < bookLength; i++) {
+			// 	if (counter[books[i].author.name]) {
+			// 		counter[books[i].author.name] += 1;
+			// 	} else {
+			// 		counter[books[i].author.name] = 1;
+			// 	}
+			// }
 
-			const reformattedArray = authors.map((author) => ({
-				id: author._id.toString(),
-				name: author.name,
-				born: author.born || null,
-				bookCount: counter[author.name] || 0,
-			}));
-			console.log("reformattedArray", reformattedArray);
-			return reformattedArray;
+			// const reformattedArray = authors.map((author) => ({
+			// 	id: author._id.toString(),
+			// 	name: author.name,
+			// 	born: author.born || null,
+			// 	bookCount: counter[author.name] || 0,
+			// }));
+
+			// return reformattedArray;
+			return Author.find({});
 		},
 		allBooks: async (root, args) => {
 			if (!args.author && !args.genres) {
@@ -211,6 +209,17 @@ const resolvers = {
 			}
 		},
 	},
+	Author: {
+		bookCount: async (root) => {
+			console.log("root", root);
+
+			const booksByAuthor = await Book.find({ author: root.id });
+
+			console.log("booksByAuthor", booksByAuthor);
+			return booksByAuthor.length;
+		},
+	},
+
 	Mutation: {
 		addBook: async (root, args, context) => {
 			const currentUser = context.currentUser;
