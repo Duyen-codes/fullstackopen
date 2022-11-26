@@ -11,6 +11,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const authorResult = useQuery(ALL_AUTHORS)
   const bookResult = useQuery(ALL_BOOKS)
+  console.log('bookResult', bookResult)
   const [token, setToken] = useState(null)
   const client = useApolloClient()
 
@@ -35,8 +36,21 @@ const App = () => {
     return (
       <div>
         <Notify errorMessage={errorMessage} />
-        <h2>Login</h2>
-        <LoginForm setToken={setToken} setError={notify} />
+        <button onClick={() => setPage('authors')}>authors</button>
+        <button onClick={() => setPage('books')}>books</button>
+        <button onClick={() => setPage('login')}>login</button>
+
+        <LoginForm
+          show={page === 'login'}
+          setToken={setToken}
+          setError={notify}
+        />
+        <Authors
+          show={page === 'authors'}
+          authors={authorResult?.data?.allAuthors}
+        />
+
+        <Books show={page === 'books'} books={bookResult?.data?.allBooks} />
       </div>
     )
   }
