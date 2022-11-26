@@ -170,7 +170,7 @@ const resolvers = {
 			let counter = [];
 			const bookLength = await Book.collection.countDocuments();
 			const books = await Book.find({});
-			const authors = await Author.find({}).populate("books");
+			const authors = await Author.find({});
 
 			for (let i = 0; i < bookLength; i++) {
 				if (counter[books[i].author]) {
@@ -184,12 +184,12 @@ const resolvers = {
 				...author,
 				bookCount: counter[author.name] || 0,
 			}));
-
+			console.log("reformattedArray", reformattedArray);
 			return reformattedArray;
 		},
 		allBooks: async (root, args) => {
 			if (!args.author && !args.genres) {
-				return Book.find({}).populate("author", { name: 1 });
+				return Book.find({});
 			}
 			if (!args.author && args.genres) {
 				return Book.find({ genres: { $in: [args.genres] } });
