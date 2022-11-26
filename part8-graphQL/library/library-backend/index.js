@@ -169,19 +169,25 @@ const resolvers = {
 		allAuthors: async () => {
 			let counter = [];
 			const bookLength = await Book.collection.countDocuments();
-			const books = await Book.find({});
+			const books = await Book.find({}).populate("author", { name: 1 });
+			console.log("books", books);
 			const authors = await Author.find({});
+			console.log("authors", authors);
 
 			for (let i = 0; i < bookLength; i++) {
-				if (counter[books[i].author]) {
-					counter[books[i].author] += 1;
+				if (counter[books[i].author.name]) {
+					counter[books[i].author.name] += 1;
 				} else {
-					counter[books[i].author] = 1;
+					counter[books[i].author.name] = 1;
 				}
 			}
 
+			console.log("counter", counter);
+
 			const reformattedArray = authors.map((author) => ({
-				...author,
+				id: author._id.toString(),
+				name: author.name,
+				born: author.born || null,
 				bookCount: counter[author.name] || 0,
 			}));
 			console.log("reformattedArray", reformattedArray);
@@ -189,7 +195,7 @@ const resolvers = {
 		},
 		allBooks: async (root, args) => {
 			if (!args.author && !args.genres) {
-				return Book.find({});
+				return Book.find({}).populate("author", { name: 1 });
 			}
 			if (!args.author && args.genres) {
 				return Book.find({ genres: { $in: [args.genres] } });
