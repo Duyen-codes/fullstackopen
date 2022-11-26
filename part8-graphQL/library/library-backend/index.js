@@ -109,7 +109,7 @@ let books = [
 
 const typeDefs = gql`
 	type Author {
-		name: String
+		name: String!
 		born: Int
 		bookCount: Int
 		id: ID!
@@ -170,8 +170,8 @@ const resolvers = {
 			let counter = [];
 			const bookLength = await Book.collection.countDocuments();
 			const books = await Book.find({});
-			const authors = await Author.find({});
-			console.log("authors from db", authors);
+			const authors = await Author.find({}).populate("books");
+
 			for (let i = 0; i < bookLength; i++) {
 				if (counter[books[i].author]) {
 					counter[books[i].author] += 1;
@@ -184,12 +184,12 @@ const resolvers = {
 				...author,
 				bookCount: counter[author.name] || 0,
 			}));
-			console.log("reformattedArray", reformattedArray);
+
 			return reformattedArray;
 		},
 		allBooks: async (root, args) => {
 			if (!args.author && !args.genres) {
-				return Book.find({});
+				return Book.find({}).populate("author", { name: 1 });
 			}
 			if (!args.author && args.genres) {
 				return Book.find({ genres: { $in: [args.genres] } });
@@ -207,33 +207,47 @@ const resolvers = {
 	},
 	Mutation: {
 		addBook: async (root, args, context) => {
-			const book = new Book({ ...args });
-			const author = { name: args.author, born: args.born || null };
-
 			const currentUser = context.currentUser;
 
-			if (book.title.length < 2) {
+			if (!currentUser) {
+				throw new AuthenticationError("not authenticated");
+			}
+			if (args.title.length < 2) {
 				throw new UserInputError(
 					"book title must be at least 2 character long",
 				);
 			}
-			if (author.name.length < 4) {
+			if (args.author.length < 4) {
 				throw new UserInputError(
 					"author name must be at least 4 character long",
 				);
 			}
 
-			if (!currentUser) {
-				throw new AuthenticationError("not authenticated");
+			let author = await Author.findOne({ name: args.author });
+
+			if (!author) {
+				const newAuthor = new Author({ name: args.author });
+
+				try {
+					author = await newAuthor.save();
+					console.log("author", author);
+				} catch (error) {
+					throw new UserInputError(error.message, {
+						invalidArgs: args,
+					});
+				}
 			}
+
+			const book = new Book({ ...args, author: author });
+
 			try {
 				await book.save();
-				await author.save();
 			} catch (error) {
 				throw new UserInputError(error.message, {
 					invalidArgs: args,
 				});
 			}
+			console.log("book", book);
 			return book;
 		},
 
@@ -274,7 +288,8 @@ const resolvers = {
 
 		// resolver of login mutation
 		login: async (root, args) => {
-			const user = User.findOne({ username: args.username });
+			const user = await User.findOne({ username: args.username });
+
 			if (!user || args.password !== "secret") {
 				throw new UserInputError("wrong credentials");
 			}
@@ -283,6 +298,7 @@ const resolvers = {
 				username: user.username,
 				id: user._id,
 			};
+			console.log("userForToken", userForToken);
 			return { value: jwt.sign(userForToken, JWT_SECRET) };
 		},
 	},
@@ -296,6 +312,7 @@ const server = new ApolloServer({
 		console.log("auth", auth);
 		if (auth && auth.toLowerCase().startsWith("bearer ")) {
 			const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
+			console.log("decodedToken", decodedToken);
 			const currentUser = await User.findById(decodedToken.id);
 			console.log("currentUser", currentUser);
 			return { currentUser };

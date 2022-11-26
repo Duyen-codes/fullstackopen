@@ -3,7 +3,7 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
-import { useQuery } from '@apollo/client'
+import { useQuery, useApolloClient } from '@apollo/client'
 import { ALL_AUTHORS, ALL_BOOKS } from './queries'
 
 const App = () => {
@@ -12,6 +12,7 @@ const App = () => {
   const authorResult = useQuery(ALL_AUTHORS)
   const bookResult = useQuery(ALL_BOOKS)
   const [token, setToken] = useState(null)
+  const client = useApolloClient()
 
   if (authorResult.loading || bookResult.loading) {
     return <div>loading...</div>
@@ -22,6 +23,12 @@ const App = () => {
     setTimeout(() => {
       setErrorMessage(null)
     }, 10000)
+  }
+
+  const logout = () => {
+    setToken(null)
+    localStorage.clear()
+    client.resetStore()
   }
 
   if (!token) {
@@ -42,6 +49,7 @@ const App = () => {
         <button onClick={() => setPage('add')}>add book</button>
       </div>
       <Notify errorMessage={errorMessage} />
+      <button onClick={logout}>logout</button>
       <Authors
         show={page === 'authors'}
         authors={authorResult?.data?.allAuthors}

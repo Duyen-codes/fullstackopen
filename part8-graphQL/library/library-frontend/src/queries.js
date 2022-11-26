@@ -30,7 +30,7 @@ export const ADD_BOOK = gql`
 		$title: String!
 		$author: String!
 		$published: Int!
-		$genres: [String!]
+		$genres: [String!]!
 	) {
 		addBook(
 			title: $title
@@ -39,7 +39,10 @@ export const ADD_BOOK = gql`
 			genres: $genres
 		) {
 			title
-			author
+			author {
+				name
+				born
+			}
 			published
 			genres
 		}

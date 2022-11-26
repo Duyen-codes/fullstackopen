@@ -15,6 +15,7 @@ const NewBook = (props) => {
 			props.setError(error.graphQLErrors[0].message);
 		},
 	});
+
 	if (!props.show) {
 		return null;
 	}
@@ -22,6 +23,7 @@ const NewBook = (props) => {
 	const submit = async (event) => {
 		event.preventDefault();
 		console.log("add book...");
+		console.log("author", author);
 		addBook({
 			variables: { title, author, published: parseInt(published, 10), genres },
 		});
