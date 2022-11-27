@@ -208,6 +208,9 @@ const resolvers = {
 				});
 			}
 		},
+		me: (root, args, context) => {
+			return context.currentUser;
+		},
 	},
 	Author: {
 		bookCount: async (root) => {
@@ -326,7 +329,7 @@ const server = new ApolloServer({
 			const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
 
 			const currentUser = await User.findById(decodedToken.id);
-
+			console.log("currentUser", currentUser);
 			return { currentUser };
 		}
 	},

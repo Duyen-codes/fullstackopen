@@ -16,15 +16,13 @@ const Books = (props) => {
         })
 
   console.log('booksToShow', booksToShow)
-  const handleFilter = (genre) => {
-    setSelectedGenre(genre)
-  }
+
   if (!books) {
     return null
   }
 
   const genreArray = books?.map((book) => book.genres)
-  console.log('genreArray', genreArray)
+
   let uniqueGenres = []
   genreArray.forEach((element) => {
     element.forEach((ele) => {
@@ -33,7 +31,6 @@ const Books = (props) => {
       }
     })
   })
-  console.log('uniqueGenres', uniqueGenres)
 
   return (
     <div>
@@ -57,7 +54,6 @@ const Books = (props) => {
       </table>
       <div>
         {uniqueGenres.map((g) => {
-          console.log(g)
           return (
             <button key={g} onClick={() => setSelectedGenre(g)}>
               {g}

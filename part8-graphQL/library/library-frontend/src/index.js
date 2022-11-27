@@ -5,7 +5,6 @@ import { setContext } from "@apollo/client/link/context";
 import {
 	ApolloClient,
 	ApolloProvider,
-	gql,
 	HttpLink,
 	InMemoryCache,
 } from "@apollo/client";
