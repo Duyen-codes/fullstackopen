@@ -142,7 +142,7 @@ const typeDefs = gql`
 		authorCount: Int!
 		bookCount: Int!
 		allAuthors(name: String, born: YesNo, bookCount: Int): [Author!]!
-		allBooks(author: String, genres: String): [Book!]!
+		allBooks(author: String, genre: String): [Book!]!
 		me: User
 	}
 
@@ -192,19 +192,24 @@ const resolvers = {
 			return Author.find({});
 		},
 		allBooks: async (root, args) => {
-			if (!args.author && !args.genres) {
+			console.log("args.genre", args.genre);
+			if (!args.author && !args.genre) {
 				return Book.find({}).populate("author", { name: 1 });
 			}
-			if (!args.author && args.genres) {
-				return Book.find({ genres: { $in: [args.genres] } });
+			if (!args.author && args.genre) {
+				const books = await Book.find({
+					genres: { $in: [args.genre] },
+				}).populate("author");
+				console.log("books", books);
+				return books;
 			}
-			if (args.author && !args.genres) {
+			if (args.author && !args.genre) {
 				return Book.find({ author: { $in: [args.author] } });
 			}
-			if (args.author && args.genres) {
+			if (args.author && args.genre) {
 				return Book.find({
 					author: { $in: [args.author] },
-					genres: { $in: [args.genres] },
+					genres: { $in: [args.genre] },
 				});
 			}
 		},

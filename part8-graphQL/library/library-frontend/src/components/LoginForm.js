@@ -19,7 +19,7 @@ const LoginForm = ({ setToken, setError, show }) => {
 			setToken(token);
 			localStorage.setItem("library-user-token", token);
 		}
-	}, [result.data]);
+	}, [result.data, setToken]);
 
 	const submit = (event) => {
 		event.preventDefault();

@@ -1,27 +1,39 @@
 import { useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
   const [selectedGenre, setSelectedGenre] = useState(null)
+  const result = useQuery(ALL_BOOKS, {
+    variables: { selectedGenre },
+    skip: !selectedGenre,
+  })
+
   if (!props.show) {
     return null
   }
 
-  const books = props.books
-  console.log('books', books)
-  const booksToShow =
-    selectedGenre === null
-      ? books
-      : books.filter((book) => {
-          return book.genres.includes(selectedGenre)
-        })
+  let booksToShow = []
+
+  if (selectedGenre && result.data) {
+    console.log('selectedGenre', selectedGenre)
+    console.log('result.data', result.data.allBooks)
+    booksToShow = result.data.allBooks
+  }
+
+  console.log('books', props.books)
+
+  if (selectedGenre === null) {
+    booksToShow = props.books
+  }
 
   console.log('booksToShow', booksToShow)
 
-  if (!books) {
+  if (!props.books) {
     return null
   }
 
-  const genreArray = books?.map((book) => book.genres)
+  const genreArray = props.books?.map((book) => book.genres)
 
   let uniqueGenres = []
   genreArray.forEach((element) => {
@@ -35,7 +47,7 @@ const Books = (props) => {
   return (
     <div>
       <h2>books</h2>
-      <p>in genre {selectedGenre}</p>
+      <p> {selectedGenre ? `in genre ${selectedGenre}` : null}</p>
       <table>
         <tbody>
           <tr>
