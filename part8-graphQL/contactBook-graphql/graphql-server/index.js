@@ -1,6 +1,6 @@
 const { execute, subscribe } = require("graphql");
 const { WebSocketServer } = require("ws");
-const { useServer } = require("graphql-ws/lib/ws");
+const { useServer } = require("graphql-ws/lib/use/ws");
 
 // const { ApolloServer } = require("apollo-server");
 const { ApolloServer } = require("apollo-server-express");
