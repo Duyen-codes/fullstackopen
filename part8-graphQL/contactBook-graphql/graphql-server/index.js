@@ -89,6 +89,8 @@ const start = async () => {
 	});
 };
 
+// call the function that does the setup and starts the server
+start();
 // server.listen().then(({ url }) => {
 // 	console.log(`Server ready at ${url}`);
 // });
