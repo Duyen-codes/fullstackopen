@@ -1,9 +1,19 @@
-const { ApolloServer } = require("apollo-server");
+// const { ApolloServer } = require("apollo-server");
+const { ApolloServer } = require("apollo-server-express");
+const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
+const express = require("express");
+const http = require("http");
+const jwt = require("jsonwebtoken");
+
+const JWT_SECRET = "TOP_SECRET";
+
+const mongoose = require("mongoose");
+
+const User = require("./models/user");
 
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
-
-const mongoose = require("mongoose");
 
 const MONGODB_URI =
 	"mongodb+srv://contactBook:contactBook@cluster0.iespfz5.mongodb.net/contactBook?retryWrites=true&w=majority";
@@ -42,24 +52,43 @@ let persons = [
 	},
 ];
 
-const server = new ApolloServer({
-	typeDefs,
-	resolvers,
-	context: async ({ req }) => {
-		const auth = req ? req.headers.authorization : null;
-		console.log("authorization", req.headers.authorization);
+const start = async () => {
+	const app = express();
+	const httpServer = http.createServer(app);
 
-		if (auth && auth.toLowerCase().startsWith("bearer ")) {
-			const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
-			const currentUser = await User.findById(decodedToken.id).populate(
-				"friends",
-			);
-			console.log("currentUser context", currentUser);
-			return { currentUser };
-		}
-	},
-});
+	const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-server.listen().then(({ url }) => {
-	console.log(`Server ready at ${url}`);
-});
+	const server = new ApolloServer({
+		schema,
+		context: async ({ req }) => {
+			const auth = req ? req.headers.authorization : null;
+			console.log("authorization", req.headers.authorization);
+
+			if (auth && auth.toLowerCase().startsWith("bearer ")) {
+				const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
+				const currentUser = await User.findById(decodedToken.id).populate(
+					"friends",
+				);
+				console.log("currentUser context", currentUser);
+				return { currentUser };
+			}
+		},
+		plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+	});
+	await server.start();
+
+	server.applyMiddleware({
+		app,
+		path: "/",
+	});
+
+	const PORT = 4000;
+
+	httpServer.listen(PORT, () => {
+		console.log(`Server is now running on http://localhost:${PORT}`);
+	});
+};
+
+// server.listen().then(({ url }) => {
+// 	console.log(`Server ready at ${url}`);
+// });
