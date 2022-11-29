@@ -1,14 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const PERSON_ADDED = gql`
-	subscription {
-		personAdded {
-			...PersonDetails
-		}
-	}
-	${PERSON_DETAILS}
-`;
-
 const PERSON_DETAILS = gql`
 	fragment PersonDetails on Person {
 		id
@@ -79,4 +70,13 @@ export const LOGIN = gql`
 			value
 		}
 	}
+`;
+
+export const PERSON_ADDED = gql`
+	subscription {
+		personAdded {
+			...PersonDetails
+		}
+	}
+	${PERSON_DETAILS}
 `;

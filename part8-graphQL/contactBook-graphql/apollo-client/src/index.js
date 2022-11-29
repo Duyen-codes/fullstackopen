@@ -8,6 +8,7 @@ import {
 	InMemoryCache,
 	split,
 } from "@apollo/client";
+
 import { setContext } from "@apollo/client/link/context";
 
 import { getMainDefinition } from "@apollo/client/utilities";

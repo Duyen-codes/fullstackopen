@@ -1,3 +1,4 @@
+import { updateCache } from "../App";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 
@@ -10,16 +11,13 @@ const PersonForm = ({ setError }) => {
 	const [city, setCity] = useState("");
 
 	const [createPerson] = useMutation(CREATE_PERSON, {
-		// refetchQueries: [{ query: ALL_PERSONS }],
 		onError: (error) => {
 			setError(error.graphQLErrors[0].message);
 		},
 		update: (cache, response) => {
-			cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
-				return {
-					allPersons: allPersons.concat(response.data.addPerson),
-				};
-			});
+			console.log("cache", cache);
+			console.log("response", response);
+			updateCache(cache, { query: ALL_PERSONS }, response.data.addPerson);
 		},
 	});
 
@@ -33,6 +31,7 @@ const PersonForm = ({ setError }) => {
 				phone: phone.length > 0 ? phone : undefined,
 			},
 		});
+
 		setName("");
 		setPhone("");
 		setStreet("");
