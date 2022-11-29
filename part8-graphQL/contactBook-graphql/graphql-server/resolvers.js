@@ -14,6 +14,7 @@ const resolvers = {
 	Query: {
 		personCount: async () => Person.collection.countDocuments(),
 		allPersons: async (root, args) => {
+			console.log("Person.find");
 			if (!args.phone) {
 				return Person.find({});
 			}
@@ -28,12 +29,28 @@ const resolvers = {
 		},
 	},
 
+	// resolver for address field of type Person
+	//
+	// the parameter root is the person object
 	Person: {
 		address: (root) => {
 			return {
 				street: root.street,
 				city: root.city,
 			};
+		},
+		// resolver of friendOf field of type Person
+		//
+		// search from all User objects the ones which have root._id in their friends list
+
+		friendOf: async (root) => {
+			const friends = await User.find({
+				friends: {
+					$in: [root._id],
+				},
+			});
+			console.log("User.find");
+			return friends;
 		},
 	},
 
