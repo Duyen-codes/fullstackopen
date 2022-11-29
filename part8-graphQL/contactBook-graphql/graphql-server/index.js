@@ -57,9 +57,12 @@ let persons = [
 ];
 
 const start = async () => {
+	// Create an Express app and HTTP server
 	const app = express();
+
 	const httpServer = http.createServer(app);
 
+	// Create the schema, which will be used separately by ApolloServer and the WebSocket server.
 	const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 	const wsServer = new WebSocketServer({
@@ -85,7 +88,10 @@ const start = async () => {
 			}
 		},
 		plugins: [
+			// Proper shutdown for the HTTP server.
 			ApolloServerPluginDrainHttpServer({ httpServer }),
+
+			// Proper shutdown for the WebSocket server.
 			{
 				async serverWillStart() {
 					return {
