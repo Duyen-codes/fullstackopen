@@ -33,6 +33,8 @@ mongoose
 		console.log("error connection to MongoDB:", error.message);
 	});
 
+mongoose.set("debug", true);
+
 let persons = [
 	{
 		name: "Arto Hellas",
