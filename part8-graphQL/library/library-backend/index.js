@@ -167,28 +167,6 @@ const resolvers = {
 		authorCount: async () => Author.collection.countDocuments(),
 		bookCount: async () => Book.collection.countDocuments(),
 		allAuthors: async () => {
-			// let counter = [];
-			// const bookLength = await Book.collection.countDocuments();
-			// const books = await Book.find({}).populate("author", { name: 1 });
-
-			// const authors = await Author.find({});
-
-			// for (let i = 0; i < bookLength; i++) {
-			// 	if (counter[books[i].author.name]) {
-			// 		counter[books[i].author.name] += 1;
-			// 	} else {
-			// 		counter[books[i].author.name] = 1;
-			// 	}
-			// }
-
-			// const reformattedArray = authors.map((author) => ({
-			// 	id: author._id.toString(),
-			// 	name: author.name,
-			// 	born: author.born || null,
-			// 	bookCount: counter[author.name] || 0,
-			// }));
-
-			// return reformattedArray;
 			return Author.find({});
 		},
 		allBooks: async (root, args) => {
@@ -298,7 +276,6 @@ const resolvers = {
 				username: args.username,
 				favoriteGenre: args.favoriteGenre,
 			});
-
 			return user.save().catch((error) => {
 				throw new UserInputError(error.message, {
 					invalidArgs: args,
@@ -318,7 +295,6 @@ const resolvers = {
 				username: user.username,
 				id: user._id,
 			};
-
 			return { value: jwt.sign(userForToken, JWT_SECRET) };
 		},
 	},
