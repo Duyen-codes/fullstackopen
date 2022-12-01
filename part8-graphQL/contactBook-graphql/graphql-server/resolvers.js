@@ -27,6 +27,8 @@ const resolvers = {
 		findPerson: async (root, args) => Person.findOne({ name: args.name }),
 
 		me: (root, args, context) => {
+			console.log("context in me", context);
+			console.log("context.currentUser in me", context.currentUser);
 			return context.currentUser;
 		},
 	},
@@ -48,7 +50,8 @@ const resolvers = {
 		addPerson: async (root, args, context) => {
 			const person = new Person({ ...args });
 			const currentUser = context.currentUser;
-
+			console.log("context", context);
+			console.log("currentUser", currentUser);
 			if (!currentUser) {
 				throw new AuthenticationError("not authenticated");
 			}
@@ -102,6 +105,7 @@ const resolvers = {
 				id: user._id,
 			};
 
+			console.log("userForToken", userForToken);
 			return { value: jwt.sign(userForToken, JWT_SECRET) };
 		},
 
@@ -122,6 +126,7 @@ const resolvers = {
 				currentUser.friends = currentUser.friends.concat(person);
 			}
 			await currentUser.save();
+			console.log("currentUser in addAsFriend", currentUser);
 
 			return currentUser;
 		},

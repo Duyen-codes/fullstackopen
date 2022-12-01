@@ -23,7 +23,8 @@ const LoginForm = ({ setToken, setError, show }) => {
 
 	const submit = (event) => {
 		event.preventDefault();
-		console.log("submited");
+		console.log("submitted");
+
 		login({ variables: { username, password } });
 	};
 
