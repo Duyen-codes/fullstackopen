@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
+    "ts-node": "ts-node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Duyen Nguyen",
