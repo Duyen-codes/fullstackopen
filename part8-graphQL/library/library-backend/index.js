@@ -30,6 +30,7 @@ const resolvers = require("./resolvers");
 const MONGODB_URI =
 	"mongodb+srv://libraryApp:libraryApp@cluster0.kcoos1o.mongodb.net/libraryApp?retryWrites=true&w=majority";
 
+// enable logging collection methods + arguments to the console
 console.log("connecting to", MONGODB_URI);
 
 mongoose
@@ -41,6 +42,7 @@ mongoose
 		console.log("error connection to MongoDB: ", error.message);
 	});
 
+mongoose.set("debug", true);
 // start func
 
 const start = async () => {

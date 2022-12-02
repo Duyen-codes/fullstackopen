@@ -9,6 +9,8 @@ const Books = (props) => {
 		skip: !selectedGenre,
 	});
 
+	console.log("result", result);
+
 	if (!props.show) {
 		return null;
 	}

@@ -15,15 +15,26 @@ const User = require("./models/user");
 const resolvers = {
 	Query: {
 		authorCount: async () => Author.collection.countDocuments(),
+
 		bookCount: async () => Book.collection.countDocuments(),
+
 		allAuthors: async () => {
-			return Author.find({});
+			console.log("QUERY allAuthors");
+			const authors = await Author.find({});
+			console.log("authors", authors);
+			const authorsWithBooks = await Author.find({}).populate("books");
+			console.log("authorsWithBooks", authorsWithBooks);
+
+			return authorsWithBooks;
 		},
+
 		allBooks: async (root, args) => {
 			console.log("args.genre", args.genre);
+
 			if (!args.author && !args.genre) {
-				return Book.find({}).populate("author", { name: 1 });
+				return Book.find({}).populate("author");
 			}
+
 			if (!args.author && args.genre) {
 				const books = await Book.find({
 					genres: { $in: [args.genre] },
@@ -31,14 +42,16 @@ const resolvers = {
 				console.log("books", books);
 				return books;
 			}
+
 			if (args.author && !args.genre) {
 				return Book.find({ author: { $in: [args.author] } }).populate("author");
 			}
+
 			if (args.author && args.genre) {
 				return Book.find({
 					author: { $in: [args.author] },
 					genres: { $in: [args.genre] },
-				});
+				}).populate("author");
 			}
 		},
 
@@ -52,10 +65,13 @@ const resolvers = {
 	}, // end of Query
 
 	Author: {
-		bookCount: async (root) => {
-			const booksByAuthor = await Book.find({ author: root.id });
+		bookCount: (root) => {
+			console.log("root in Author bookCount", root);
 
-			return booksByAuthor.length;
+			const booksByAuthor = root.books.length;
+
+			console.log("booksByAuthor", booksByAuthor);
+			return booksByAuthor;
 		},
 	},
 
@@ -89,6 +105,7 @@ const resolvers = {
 			}
 
 			const book = new Book({ ...args, author });
+			console.log("book in addBook resolvers", book);
 
 			try {
 				await book.save();
@@ -100,11 +117,13 @@ const resolvers = {
 
 			pubsub.publish("BOOK_ADDED", { bookAdded: book });
 
-			console.log("book", book);
+			console.log("book before return", book);
 			return book;
 		},
 
 		editAuthor: async (root, args, { currentUser }) => {
+			console.log("currentUser in editAuthor", currentUser);
+
 			if (!currentUser) {
 				throw new AuthenticationError("not authenticated");
 			}

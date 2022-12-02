@@ -5,6 +5,7 @@ import { useMutation } from "@apollo/client";
 import Select from "react-select";
 
 const Authors = ({ show, authors }) => {
+	console.log("show in Authors", show);
 	const [selectedOption, setSelectedOption] = useState(null);
 	const [born, setBorn] = useState("");
 
@@ -18,6 +19,7 @@ const Authors = ({ show, authors }) => {
 	}));
 
 	const submit = (event) => {
+		console.log("edit author submitted");
 		event.preventDefault();
 		editAuthor({
 			variables: { name: selectedOption.value, setBornTo: parseInt(born) },
@@ -61,6 +63,7 @@ const Authors = ({ show, authors }) => {
 				<div>
 					born{" "}
 					<input
+						type='number'
 						value={born}
 						onChange={({ target }) => setBorn(target.value)}
 					/>
