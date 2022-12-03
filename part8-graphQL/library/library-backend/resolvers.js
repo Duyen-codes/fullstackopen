@@ -92,10 +92,10 @@ const resolvers = {
 			let author = await Author.findOne({ name: args.author });
 
 			if (!author) {
-				const newAuthor = new Author({ name: args.author });
+				author = new Author({ name: args.author });
 
 				try {
-					author = await newAuthor.save();
+					await author.save();
 					console.log("author", author);
 				} catch (error) {
 					throw new UserInputError(error.message, {
@@ -105,10 +105,12 @@ const resolvers = {
 			}
 
 			const book = new Book({ ...args, author });
+			author.books = author.books.concat(book);
 			console.log("book in addBook resolvers", book);
 
 			try {
 				await book.save();
+				await author.save();
 			} catch (error) {
 				throw new UserInputError(error.message, {
 					invalidArgs: args,
