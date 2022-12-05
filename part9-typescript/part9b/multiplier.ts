@@ -1,9 +1,37 @@
+interface MultiplyValues {
+  value1: number
+  value2: number
+}
+
+const parseArguments = (args: Array<string>): MultiplyValues => {
+  if (args.length < 4) throw new Error('Not enough arguments')
+  if (args.length > 4) throw new Error('Too many arguments')
+
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    return {
+      value1: Number(args[2]),
+      value2: Number(args[3]),
+    }
+  } else throw new Error('Provided values were not numbers!')
+}
+
 const multiplicator = (a: number, b: number, printText: string) => {
   console.log(printText, a * b)
 }
 
-multiplicator(
-  'how about a string?',
-  4,
-  'Multiplied numbers 2 and 4, the result is:',
-)
+try {
+  const { value1, value2 } = parseArguments(process.argv)
+  console.log('process.argv', process.argv)
+
+  multiplicator(
+    value1,
+    value2,
+    `Multiplied numbers ${value1} and ${value2}, the result is:`,
+  )
+} catch (error) {
+  let errorMessage = 'Something bad happened'
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message
+  }
+  console.log(errorMessage)
+}
