@@ -37,5 +37,3 @@ try {
   }
   console.log(errorMessage)
 }
-
-// console.log(calculateBmi(180, 74))

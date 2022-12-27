@@ -7,12 +7,18 @@
     "ts-node": "ts-node",
     "multiply": "ts-node multiplier.ts",
     "calculate": "ts-node calculator.ts",
+    "start": "ts-node index.ts",
+    "dev": "ts-node-dev index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Duyen Nguyen",
   "license": "ISC",
   "devDependencies": {
     "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
 }

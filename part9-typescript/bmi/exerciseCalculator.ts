@@ -28,8 +28,7 @@ const calculateExercises = (
     rating = 3
     ratingDescription = 'great job'
   }
-  console.log('trainingDays', trainingDays)
-  console.log('periodLength', periodLength)
+
   const hourSum = hourArr.reduce((sum, value) => {
     return sum + value
   }, 0)
@@ -39,9 +38,7 @@ const calculateExercises = (
   if (average === targetAmount) {
     success = true
   } else success = false
-  console.log('rating', rating)
-  console.log('ratingDescription', ratingDescription)
-  console.log('targetAmount', targetAmount)
+
   return {
     periodLength,
     trainingDays,
