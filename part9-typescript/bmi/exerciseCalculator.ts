@@ -10,12 +10,36 @@ interface resultObject {
   average: number
 }
 
+interface hoursAndTarget {
+  hoursArr: Array<number>
+  target: number
+}
+
+const parseArguments = (args: Array<string>): hoursAndTarget => {
+  if (args.length < 4) throw new Error('not enough arguments')
+
+  const hoursAndTarget = process.argv.slice(2).map((item) => {
+    if (!isNaN(Number(item))) {
+      return Number(item)
+    } else {
+      throw new Error('provided values were not numbers!')
+    }
+  })
+
+  const hoursArr: Array<number> = hoursAndTarget.slice(1)
+  const target: number = hoursAndTarget[0]
+  return {
+    hoursArr: hoursArr,
+    target: target,
+  }
+}
+
 const calculateExercises = (
-  hourArr: Array<number>,
+  hoursArr: Array<number>,
   targetAmount: number,
 ): resultObject => {
-  const periodLength = hourArr.length
-  const trainingDaysArr = hourArr.filter((d) => d !== 0)
+  const periodLength = hoursArr.length
+  const trainingDaysArr = hoursArr.filter((d) => d !== 0)
   const trainingDays = trainingDaysArr.length
   let rating, ratingDescription, success
   if (trainingDays < 3) {
@@ -29,12 +53,11 @@ const calculateExercises = (
     ratingDescription = 'great job'
   }
 
-  const hourSum = hourArr.reduce((sum, value) => {
+  const hourSum = hoursArr.reduce((sum, value) => {
     return sum + value
   }, 0)
-  const average = hourSum / hourArr.length
+  const average = hourSum / hoursArr.length
 
-  console.log('average', average)
   if (average === targetAmount) {
     success = true
   } else success = false
@@ -50,4 +73,16 @@ const calculateExercises = (
   }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+try {
+  const { hoursArr, target } = parseArguments(process.argv)
+  console.log(calculateExercises(hoursArr, target))
+} catch (error) {
+  let errorMessage = 'something bad happened'
+  if (error instanceof Error) {
+    errorMessage += ' Error ' + error.message
+  }
+  console.log(errorMessage)
+}
+// console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+
+export { calculateExercises }
