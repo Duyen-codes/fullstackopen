@@ -9,11 +9,14 @@
     "calculate": "ts-node calculator.ts",
     "start": "ts-node index.ts",
     "dev": "ts-node-dev index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint --ext .ts ."
   },
   "author": "Duyen Nguyen",
   "license": "ISC",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/parser": "^5.47.1",
+    "eslint": "^8.30.0",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.3"

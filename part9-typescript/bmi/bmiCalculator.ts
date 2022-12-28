@@ -19,12 +19,12 @@ const parseArguments = (args: Array<string>): bmiValues => {
 const calculateBmi = (heightInCm: number, weightInKg: number) => {
   const result = weightInKg / Math.pow(heightInCm * 0.01, 2)
   if (result < 18.5) {
-    console.log(`Underweight`)
+    return `Underweight`
   } else if (18.5 < result && result < 25) {
-    console.log('Normal (healthy weight)')
+    return 'Normal (healthy weight)'
   } else if (result >= 25 && result < 30) {
-    console.log('Overweight')
-  } else console.log('obesity')
+    return 'Overweight'
+  } else return 'obesity'
 }
 
 try {
@@ -37,3 +37,5 @@ try {
   }
   console.log(errorMessage)
 }
+
+export { calculateBmi }

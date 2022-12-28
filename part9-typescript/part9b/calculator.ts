@@ -31,3 +31,5 @@ try {
 }
 
 console.log(process.argv)
+
+export { calculator }
