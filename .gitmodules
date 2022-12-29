@@ -5,3 +5,6 @@
 	path = blogListApp
 	url = https://github.com/Duyen-codes/blogListApp
 
+[submodule "part9-typescript/patientor/patientor-frontend"]
+	path = part9-typescript/patientor/patientor-frontend
+	url = https://github.com/Duyen-codes/patientor-frontend
