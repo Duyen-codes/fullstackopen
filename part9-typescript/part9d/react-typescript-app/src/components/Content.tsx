@@ -1,15 +1,15 @@
+import Part from './Part'
+
 export interface coursePart {
   name: string
   exerciseCount: number
 }
 
-const Content = ({ courseParts }: { courseParts: Array<coursePart> }) => {
+const Content = (props: { courseParts: any }) => {
   return (
     <div>
-      {courseParts.map((coursePart) => (
-        <li key={coursePart.name}>
-          {coursePart.name} {coursePart.exerciseCount}
-        </li>
+      {props.courseParts.map((part: any) => (
+        <Part key={part.name} part={part} />
       ))}
     </div>
   )
