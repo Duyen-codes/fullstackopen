@@ -14,4 +14,9 @@ router.post('/', (req, res) => {
   res.json(addedEntry)
 })
 
+router.get('/:id', (req, _res) => {
+  const id = req.params.id
+  console.log('id', id)
+})
+
 export default router

@@ -18,8 +18,6 @@ router.get('/', (_req, res) => {
 })
 
 router.post('/', (req, res) => {
-  console.log('req.body', req.body)
-
   try {
     const newDiaryEntry = toNewDiaryEntry(req.body)
 

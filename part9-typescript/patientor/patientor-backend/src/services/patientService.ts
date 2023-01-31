@@ -31,4 +31,5 @@ const addPatient = (entry: NewPatientEntry): PatientEntry => {
   patients.push(newPatientEntry)
   return newPatientEntry
 }
+
 export default { getEntries, getNonSensitiveEntries, addPatient }
