@@ -9,9 +9,17 @@ router.get('/', (_req, res) => {
 })
 
 router.post('/', (req, res) => {
-  const newPatientEntry = toNewPatientEntry(req.body)
-  const addedEntry = patientService.addPatient(newPatientEntry)
-  res.json(addedEntry)
+  try {
+    const newPatientEntry = toNewPatientEntry(req.body)
+    const addedEntry = patientService.addPatient(newPatientEntry)
+    res.json(addedEntry)
+  } catch (error) {
+    let errorMessage = 'something went wrong'
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message
+    }
+    res.status(400).send(errorMessage)
+  }
 })
 
 router.get('/:id', (req, _res) => {
