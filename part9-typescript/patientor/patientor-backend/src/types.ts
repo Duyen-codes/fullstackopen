@@ -32,7 +32,7 @@ export interface Patient {
   occupation: string
   gender: Gender
   dateOfBirth: string
-  entries: Entry[]
+  entries?: Entry[]
 }
 
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>
