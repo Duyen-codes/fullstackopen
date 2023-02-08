@@ -4,7 +4,6 @@ import {
   NewPatientEntry,
   PatientEntry,
   NonSensitivePatientEntry,
-  Patient,
 } from '../types'
 import { v1 as uuid } from 'uuid'
 
@@ -33,8 +32,8 @@ const addPatient = (entry: NewPatientEntry): PatientEntry => {
   return newPatientEntry
 }
 
-const findById = (id: number): Patient | undefined => {
-  const entry = patients.find((p) => Number(p.id) === id)
+const findById = (id: string): PatientEntry | undefined => {
+  const entry = patients.find((p) => p.id === id)
   return entry
 }
 

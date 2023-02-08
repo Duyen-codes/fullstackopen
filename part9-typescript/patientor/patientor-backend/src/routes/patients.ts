@@ -23,7 +23,7 @@ router.post('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-  const patient = patientService.findById(Number(req.params.id))
+  const patient = patientService.findById(req.params.id)
 
   if (patient) {
     res.send(patient)
