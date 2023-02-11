@@ -28,6 +28,11 @@ export type Entry =
   | HealthCheckEntry
   | OccupationalHealthcareEntry
 
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never
+
+export type NewEntry = UnionOmit<Entry, 'id'>
 export interface Patient {
   id: string
   name: string
@@ -55,6 +60,16 @@ interface BaseEntry {
   diagnosisCodes?: Array<DiagnoseEntry['code']>
 }
 
+export interface SickLeave {
+  startDate: string
+  endDate: string
+}
+
+export interface Discharge {
+  date: string
+  criteria: string
+}
+
 interface HealthCheckEntry extends BaseEntry {
   type: 'HealthCheck'
   healthCheckRating: HealthCheckRating
@@ -63,16 +78,10 @@ interface HealthCheckEntry extends BaseEntry {
 interface OccupationalHealthcareEntry extends BaseEntry {
   type: 'OccupationalHealthcare'
   employerName: string
-  sickLeave?: {
-    startDate: string
-    endDate: string
-  }
+  sickLeave?: SickLeave
 }
 
 interface HospitalEntry extends BaseEntry {
   type: 'Hospital'
-  discharge: {
-    date: string
-    criteria: string
-  }
+  discharge: Discharge
 }
