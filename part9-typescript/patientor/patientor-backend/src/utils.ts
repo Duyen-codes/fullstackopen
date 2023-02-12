@@ -47,15 +47,20 @@ const parseGender = (gender: unknown): Gender => {
   return gender
 }
 
-const isHealthCheckRating = (rating: any): rating is HealthCheckRating => {
-  return Object.values(HealthCheckRating).includes(rating)
+const isHealthCheckRating = (param: any): param is HealthCheckRating => {
+  return Object.values(HealthCheckRating).includes(param)
 }
 
-const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
-  if (!rating || !isHealthCheckRating(rating)) {
-    throw new Error('Incorrect or missing healthCheckRating: ' + rating)
+const parseHealthCheckRating = (
+  healthCheckRating: unknown,
+): HealthCheckRating => {
+  if (!healthCheckRating || !isHealthCheckRating(healthCheckRating)) {
+    throw new Error(
+      'Incorrect or missing healthCheckRating: ' + healthCheckRating,
+    )
   }
-  return rating
+
+  return healthCheckRating
 }
 
 const isDischarge = (discharge: any): discharge is Discharge => {
