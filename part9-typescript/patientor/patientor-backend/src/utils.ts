@@ -4,6 +4,7 @@ import {
   Entry,
   Discharge,
   HealthCheckRating,
+  DiagnoseEntry
 } from './types'
 
 import { v4 as uuid } from 'uuid'
@@ -88,6 +89,14 @@ const parseOccupation = (occupation: unknown): string => {
   return occupation
 }
 
+const parseDiagnosisCodes = (object: unknown): Array<DiagnoseEntry['code']> => {
+  if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+    return [] as Array<DiagnoseEntry['code']>;
+  }
+    return object.diagnosisCodes as Array<DiagnoseEntry['code']>
+}
+
+
 type Fields = {
   name: unknown
   dateOfBirth: unknown
@@ -126,6 +135,7 @@ export const toNewEntry = (object: any): Entry => {
     description: parseString(object.description),
     date: parseDate(object.date),
     specialist: parseString(object.specialist),
+    diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes)
   }
 
   switch (object.type) {
