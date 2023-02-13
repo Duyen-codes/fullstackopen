@@ -29,7 +29,7 @@ try {
     `Multiplied numbers ${value1} and ${value2}, the result is:`,
   )
 } catch (error) {
-  let errorMessage = 'Something bad happened'
+  let errorMessage = 'Something bad happened.'
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message
   }

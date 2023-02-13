@@ -23,3 +23,29 @@ npm install -g ts-node typescript
 ```shell
 npm install --save-dev ts-node typescript
 ```
+
+### 9c Setting up the project
+
+run npm init and install typescript package as a dev dep
+
+```shell
+npm install typescript --save-dev
+```
+
+TypeScript's Native Compiler(tsc), npm script for running tsc is as follows:
+
+```shell
+{
+    //...
+    "script": {
+        "tsc": "tsc"
+    },
+    //...
+}
+```
+
+initialize tsconfig.json settings by running:
+
+```shell
+npm run tsc -- --init
+```
