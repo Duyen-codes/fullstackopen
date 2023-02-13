@@ -45,8 +45,6 @@ router.post('/:id/entries', (req, res) => {
       patient,
     )
 
-    console.log('updatedPatient', updatedPatient)
-
     res.json(updatedPatient)
   } catch (error) {
     res.status(400).send(error)

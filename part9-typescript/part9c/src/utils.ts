@@ -7,10 +7,12 @@ type Fields = {
   visibility: unknown
 }
 
+// string validation func, is a type guard. it's a func that returns a boolean and has a type predicate as the return type. type predicate in our case is 'text is string'(paramName is Type)
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String
 }
 
+// validate comment field, check that it exists and ensure that it is of the type string
 const parseComment = (comment: unknown): string => {
   if (!comment || !isString(comment)) {
     throw new EvalError('Incorrect or missing comment')

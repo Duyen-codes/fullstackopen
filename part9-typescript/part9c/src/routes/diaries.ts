@@ -19,6 +19,8 @@ router.get('/', (_req, res) => {
 
 router.post('/', (req, res) => {
   try {
+
+    // toNewDiaryEntry func receives the request body as a param and returns a properly-typed NewDiaryEntry object (DiaryEntry without  id field)
     const newDiaryEntry = toNewDiaryEntry(req.body)
 
     const addedEntry = diaryService.addDiary(newDiaryEntry)

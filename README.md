@@ -49,3 +49,10 @@ initialize tsconfig.json settings by running:
 ```shell
 npm run tsc -- --init
 ```
+
+doublecheck that everything really works by running the compiler and the eslint from the command line with commands:
+
+```shell
+npm run tsc
+npm run lint
+```
