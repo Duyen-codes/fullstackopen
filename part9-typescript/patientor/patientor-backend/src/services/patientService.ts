@@ -44,13 +44,11 @@ const findById = (id: string): Patient | undefined => {
 }
 
 const addEntryToPatient = (entry: Entry, patient: Patient) => {
-  console.log('entry', entry)
-
   const updatedPatient = {
     ...patient,
     entries: patient.entries.concat(entry),
   }
-  console.log('updatedPatient', updatedPatient)
+ 
 
   return updatedPatient
 }
