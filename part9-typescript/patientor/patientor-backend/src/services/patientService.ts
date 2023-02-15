@@ -48,7 +48,6 @@ const addEntryToPatient = (entry: Entry, patient: Patient) => {
     ...patient,
     entries: patient.entries.concat(entry),
   }
- 
 
   return updatedPatient
 }
