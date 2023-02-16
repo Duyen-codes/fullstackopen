@@ -59,3 +59,9 @@ npm run tsc
 npm run lint
 ```
 ## Part13
+
+### part 13a
+- Create database table automatically for model Note
+```shell
+Note.sync()
+```
