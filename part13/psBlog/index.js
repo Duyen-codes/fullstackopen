@@ -21,5 +21,5 @@ const start = async () => {
 
 start()
 
-// this has to be the last loaded middleware
+// this has to be the last loaded middleware.
 app.use(middleware.errorHandler)
