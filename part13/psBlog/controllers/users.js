@@ -10,21 +10,24 @@ router.post("/", async (req, res) => {
 		const user = await User.create({ username, name, passwordHash });
 		res.status(201).json(user);
 	} catch (error) {
-		console.error(error);
-		return res.status(400).json({ error });
+		return res.status(400).json({ error: error.message });
 	}
 });
 
 router.get("/", async (req, res) => {
-	const users = await User.findAll();
+	const users = await User.findAll({
+		include: {
+			model: Blog,
+			attributes: { exclude: ["userId"] },
+		},
+	});
 	res.json(users);
 });
 
 router.put("/:username", async (req, res) => {
 	const { username } = req.params;
 	const { newUsername } = req.body;
-	console.log("username", username);
-	console.log("newUsername", newUsername);
+
 	try {
 		const user = await User.findOne({ where: { username } });
 
@@ -35,7 +38,7 @@ router.put("/:username", async (req, res) => {
 		// update the user's username
 
 		user.username = newUsername;
-		console.log("user", user);
+
 		await user.save();
 
 		res.json(user); // return the update user object
