@@ -1,25 +1,27 @@
-require("dotenv").config()
-const express = require("express")
-const app = express()
-const { PORT } = require("./util/config")
-const { connectToDatabase } = require("./util/db")
+require("dotenv").config();
+const express = require("express");
+const app = express();
+const { PORT } = require("./util/config");
+const { connectToDatabase } = require("./util/db");
 
-const blogsRouter = require("./controllers/blogs")
+const blogsRouter = require("./controllers/blogs");
+const usersRouter = require("./controllers/users");
 
-const middleware = require("./util/middleware")
+const middleware = require("./util/middleware");
 
-app.use(express.json())
+app.use(express.json());
 
-app.use("/api/blogs", blogsRouter)
+app.use("/api/blogs", blogsRouter);
+app.use("/api/users", usersRouter);
 
 const start = async () => {
-	await connectToDatabase()
+	await connectToDatabase();
 	app.listen(PORT, () => {
-		console.log(`Server running on port ${PORT}`)
-	})
-}
+		console.log(`Server running on port ${PORT}`);
+	});
+};
 
-start()
+start();
 
 // this has to be the last loaded middleware.
-app.use(middleware.errorHandler)
+app.use(middleware.errorHandler);

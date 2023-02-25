@@ -1,7 +1,7 @@
-const { User } = require("../../part13a/models");
-const Blog = require("./blog")
+const User = require("./user");
+const Blog = require("./blog");
 
-Blog.sync()
-User.sync()
+Blog.sync({ alter: true });
+User.sync({ alter: true });
 
-module.exports = { Blog }
+module.exports = { Blog, User };
