@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "migration:down":"node util/rollback.js",
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,6 +25,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.9.0",
-    "sequelize": "^6.28.0"
+    "sequelize": "^6.28.0",
+    "umzug": "^3.2.1"
   }
 }

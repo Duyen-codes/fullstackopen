@@ -1,7 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
-
 const { sequelize } = require("../util/db");
-
 class User extends Model {}
 
 User.init(
@@ -23,7 +21,7 @@ User.init(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		passwordHash: {
+		password_hash: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

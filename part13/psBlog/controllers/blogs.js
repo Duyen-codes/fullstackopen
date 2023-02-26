@@ -3,6 +3,7 @@ const { Blog, User } = require("../models");
 const jwt = require("jsonwebtoken");
 const { reset } = require("nodemon");
 const { SECRET } = require("../util/config");
+const { tokenExtractor } = require("../util/middleware");
 
 const { Op } = require("sequelize");
 
@@ -15,33 +16,24 @@ const blogFinder = async (req, res, next) => {
 	}
 };
 
-const tokenExtractor = (req, res, next) => {
-	const authorization = req.get("authorization");
-	if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-		try {
-			const token = authorization.substring(7);
-			req.decodedToken = jwt.verify(token, SECRET);
-
-			next();
-		} catch {
-			return res.status(401).json({ error: "token invalid" });
-		}
-	} else {
-		return res.status(401).json({ error: "token missing" });
-	}
-};
-
 router.post("/", tokenExtractor, async (req, res, next) => {
+	console.log("posting new blog");
 	try {
 		const user = await User.findByPk(req.decodedToken.id);
 		console.log("user", user);
 		if (!user) {
 			return res.status(401).json({ error: "user not found" });
 		}
+
+		if (req.body.year < 1991 || req.body.year > new Date().getFullYear()) {
+			return res.status(400).json({ error: "year written is invalid" });
+		}
+
 		const blog = await Blog.create({ ...req.body, userId: user.id });
 
 		res.status(201).json(blog);
 	} catch (error) {
+		console.log(error);
 		next(error);
 	}
 });

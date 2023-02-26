@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
 
 	// check password, also attached to the request. bcrypt.compare method is used to check if the password is correct
 	const passwordCorrect =
-		user === null ? false : await bcrypt.compare(password, user.passwordHash);
+		user === null ? false : await bcrypt.compare(password, user.password_hash);
 
 	// if user is not found or the password is incorrect, the request is responded to with the status code 401 unauthorized
 	if (!(user && passwordCorrect)) {
