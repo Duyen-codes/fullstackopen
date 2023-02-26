@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const { reset } = require("nodemon");
 const { SECRET } = require("../util/config");
 
+const { Op } = require("sequelize");
+
 const blogFinder = async (req, res, next) => {
 	try {
 		req.blog = await Blog.findByPk(req.params.id);
@@ -45,11 +47,22 @@ router.post("/", tokenExtractor, async (req, res, next) => {
 });
 
 router.get("/", async (req, res) => {
+	const where = {};
+
+	if (req.query.search) {
+		where[Op.or] = [
+			{ title: { [Op.substring]: req.query.search } },
+			{ author: { [Op.substring]: req.query.search } },
+		];
+	}
+
 	const blogs = await Blog.findAll({
 		attributes: { exclude: ["userId"] },
 		include: {
 			model: User,
 		},
+		where,
+		order: [["likes", "DESC"]],
 	});
 	res.json(blogs);
 });

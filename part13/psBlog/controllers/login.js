@@ -15,12 +15,14 @@ router.post("/", async (req, res) => {
 	const passwordCorrect =
 		user === null ? false : await bcrypt.compare(password, user.passwordHash);
 
+	// if user is not found or the password is incorrect, the request is responded to with the status code 401 unauthorized
 	if (!(user && passwordCorrect)) {
 		return res.status(401).json({
 			error: "invalid  username or password",
 		});
 	}
 
+	// if password is correct, a token is created with the method jwt.sign
 	const userForToken = {
 		username: user.username,
 		id: user.id,

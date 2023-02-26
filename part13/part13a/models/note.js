@@ -1,6 +1,6 @@
-const { DataTypes, Model } = require("sequelize")
+const { DataTypes, Model } = require("sequelize");
 
-const { sequelize } = require("../util/db")
+const { sequelize } = require("../util/db");
 class Note extends Model {}
 
 Note.init(
@@ -16,6 +16,7 @@ Note.init(
 		},
 		important: {
 			type: DataTypes.BOOLEAN,
+			allowNull: false,
 		},
 		date: {
 			type: DataTypes.DATE,
@@ -27,6 +28,6 @@ Note.init(
 		timestamps: false,
 		modelName: "note",
 	},
-)
+);
 
-module.exports = Note
+module.exports = Note;
