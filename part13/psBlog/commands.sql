@@ -11,3 +11,6 @@ insert into blogs (author, url, title) values ('Matti Luukkainen', 'https://medi
 insert into blogs (author, url, title) values ('James Bond', 'https://stackoverflow.com/', 'Add at least two blogs to the database.');
 
 select * from blogs;
+
+
+insert into readinglists (user_id,blog_id) values (3, 10);
