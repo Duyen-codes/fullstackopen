@@ -29,8 +29,14 @@ router.post("/", tokenExtractor, async (req, res, next) => {
 			return res.status(400).json({ error: "year written is invalid" });
 		}
 
-		const blog = await Blog.create({ ...req.body, userId: user.id });
+		// const blog = await Blog.create({ ...req.body });
 
+		const blog = Blog.build({ ...req.body });
+		console.log("user.id", user.id);
+		blog.userId = user.id;
+		await blog.save();
+		console.log("req.body", req.body);
+		console.log("blog", blog);
 		res.status(201).json(blog);
 	} catch (error) {
 		console.log(error);

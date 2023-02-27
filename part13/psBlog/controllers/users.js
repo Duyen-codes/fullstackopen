@@ -24,6 +24,7 @@ router.get("/", async (req, res) => {
 	const users = await User.findAll({
 		include: {
 			model: Blog,
+			as: "readings",
 			attributes: { exclude: ["userId"] },
 		},
 	});
@@ -31,16 +32,31 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-	const users = await User.findByPk(req.params.id, {
-		include: {
-			model: Blog,
-			as: "readings",
-			through: {
-				attributes: ["id", "read"],
+	const where = {};
+
+	console.log("req.query.read", req.query);
+	if (req.query.read) {
+		where.read = req.query.read === "true";
+	}
+	const user = await User.findByPk(req.params.id, {
+		attributes: [],
+		include: [
+			{
+				model: Blog,
+				as: "readings",
+				through: {
+					attributes: ["id", "read"],
+					where,
+				},
 			},
-		},
+		],
 	});
-	res.json(users);
+
+	if (!user) {
+		return res.status(404).end();
+	}
+
+	res.json(user);
 });
 
 router.put("/:username", async (req, res) => {
