@@ -1,7 +1,7 @@
 const Note = require("./note");
 const User = require("./user");
-const Team = require("../../part13a/models/team");
-const Membership = require("../../part13a/models/membership");
+const Team = require("./team");
+const Membership = require("./membership");
 const UserNotes = require("./user_notes");
 
 User.hasMany(Note);

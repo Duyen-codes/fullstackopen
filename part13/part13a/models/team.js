@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 
-const { sequelize } = require("../../psBlog/util/db");
+const { sequelize } = require("../util/db");
 
 class Team extends Model {}
 
