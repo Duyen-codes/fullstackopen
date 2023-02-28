@@ -14,3 +14,7 @@ select * from blogs;
 
 
 insert into readinglists (user_id,blog_id) values (3, 10);
+
+DELETE FROM migrations WHERE name = '20230227104456-remove_user_id_from_blog.js';
+
+DELETE FROM migrations WHERE name = '20230228080129-create_sessions.js';

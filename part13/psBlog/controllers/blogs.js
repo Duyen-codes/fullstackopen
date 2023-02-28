@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Blog, User } = require("../models");
+const { Blog, User, Session } = require("../models");
 const jwt = require("jsonwebtoken");
 const { reset } = require("nodemon");
 const { SECRET } = require("../util/config");
@@ -20,23 +20,28 @@ router.post("/", tokenExtractor, async (req, res, next) => {
 	console.log("posting new blog");
 	try {
 		const user = await User.findByPk(req.decodedToken.id);
+
 		console.log("user", user);
+
+		console.log("session", session);
 		if (!user) {
 			return res.status(401).json({ error: "user not found" });
+		}
+
+		const session = await Session.findOne({
+			where: { userId: req.decodedToken.id },
+		});
+
+		if (!session) {
+			return res.status(401).json({ error: "session not found" });
 		}
 
 		if (req.body.year < 1991 || req.body.year > new Date().getFullYear()) {
 			return res.status(400).json({ error: "year written is invalid" });
 		}
 
-		// const blog = await Blog.create({ ...req.body });
+		const blog = await Blog.create(req.body);
 
-		const blog = Blog.build({ ...req.body });
-		console.log("user.id", user.id);
-		blog.userId = user.id;
-		await blog.save();
-		console.log("req.body", req.body);
-		console.log("blog", blog);
 		res.status(201).json(blog);
 	} catch (error) {
 		console.log(error);
@@ -80,8 +85,16 @@ router.delete("/:id", blogFinder, tokenExtractor, async (req, res, next) => {
 
 		console.log("req.blog", req.blog);
 
-		if (!user || !req.blog || req.blog.userId !== user.id) {
+		if (!user || !req.blog) {
 			return res.status(401).json({ error: "operation not permitted" });
+		}
+
+		const session = await Session.findOne({
+			where: { userId: req.decodedToken.id },
+		});
+
+		if (!session) {
+			return res.status(401).json({ error: "session not found" });
 		}
 
 		await req.blog.destroy();

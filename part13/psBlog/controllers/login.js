@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { User } = require("../models");
+const { User, Session } = require("../models");
+const { SECRET } = require("../util/config");
 
 router.post("/", async (req, res) => {
 	const { username, password } = req.body;
@@ -22,13 +23,22 @@ router.post("/", async (req, res) => {
 		});
 	}
 
+	// if user is disabled, res with error msg
+
+	if (user.disabled) {
+		return res.status(401).json({ error: "user account is disabled" });
+	}
 	// if password is correct, a token is created with the method jwt.sign
 	const userForToken = {
 		username: user.username,
 		id: user.id,
 	};
 
-	const token = jwt.sign(userForToken, process.env.SECRET);
+	const token = jwt.sign(userForToken, SECRET);
+
+	const session = await Session.create({ userId: user.id, token });
+
+	console.log("session", session);
 
 	res.status(200).send({ token, username: user.username, name: user.name });
 });
