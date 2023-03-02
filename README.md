@@ -65,3 +65,16 @@ npm run lint
 ```shell
 Note.sync()
 ```
+display
+```shell
+\d
+```
+display table users
+```shell
+\d users
+```
+
+toggle expands display view
+```shell
+\x
+```
