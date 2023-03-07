@@ -8,3 +8,6 @@
 [submodule "part9-typescript/patientor/patientor-frontend"]
 	path = part9-typescript/patientor/patientor-frontend
 	url = https://github.com/Duyen-codes/patientor-frontend
+[submodule "full-stack-open-pokedex"]
+	path = full-stack-open-pokedex
+	url = https://github.com/Duyen-codes/full-stack-open-pokedex.git
