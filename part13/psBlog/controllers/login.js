@@ -28,6 +28,7 @@ router.post("/", async (req, res) => {
 	if (user.disabled) {
 		return res.status(401).json({ error: "user account is disabled" });
 	}
+
 	// if password is correct, a token is created with the method jwt.sign
 	const userForToken = {
 		username: user.username,
